@@ -12,7 +12,7 @@ public class StringExpectation extends BaseExpectation<String, StringExpectation
         match(Matchers.containsString(expected));
     }
 
-    public void toEqual(String expected) {
+    @Override public void toEqual(String expected) {
         if (!GreatExpectations.equalsSafely(expected, actual) && !inverted) {
             GreatExpectations.lastExpectTrace = null;
             throw new ComparisonFailure("Expected strings to be equal to each other", expected, actual); // Shows friendly diff
