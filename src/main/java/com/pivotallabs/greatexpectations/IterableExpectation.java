@@ -12,6 +12,11 @@ public class IterableExpectation<T> extends BaseExpectation<Iterable<? extends T
         match(Matchers.contains(expectedItems));
     }
 
+    public void toHaveItems(T... expectedItems) {
+        //noinspection unchecked
+        match((Matcher) Matchers.hasItems(expectedItems));
+    }
+
     public void toBeEmpty() {
         //noinspection unchecked
         match((Matcher) Matchers.emptyIterable());
