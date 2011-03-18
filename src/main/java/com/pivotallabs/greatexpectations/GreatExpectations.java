@@ -117,8 +117,6 @@ public class GreatExpectations {
                 for (CtMethod ctMethod : ctParentClass.getMethods()) {
                     boolean isOnObject = ctMethod.getDeclaringClass().equals(objectCtClass);
                     if (!isOnObject && ctMethod.getReturnType().equals(CtClass.booleanType)) {
-
-                        System.out.println("ctMethod = " + ctMethod);
                         ctClass.addMethod(CtNewMethod.make(CtClass.booleanType, ctMethod.getName(),
                                 ctMethod.getParameterTypes(), ctMethod.getExceptionTypes(),
                                 "{ return " + GreatExpectations.class.getName() + ".wrap(this, \"" + ctMethod.getName() + "\", super." + ctMethod.getName() + "($1)); }", ctClass));

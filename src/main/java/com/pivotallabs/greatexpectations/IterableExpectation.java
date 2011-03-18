@@ -3,17 +3,13 @@ package com.pivotallabs.greatexpectations;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
-public class IterableExpectation<T> extends BaseExpectation<Iterable<? extends T>, IterableExpectation<T>> {
-    public IterableExpectation(Iterable<T> actual) {
-        super(actual);
-    }
-
+public class IterableExpectation<T extends Iterable<?>, M extends ObjectExpectation<T, M>> extends BaseExpectation<T, M> {
     public void toContain(T... expectedItems) {
-        match(Matchers.contains(expectedItems));
+//        match(Matchers.contains(expectedItems));
     }
 
     public void toContainInAnyOrder(T... expectedItems) {
-        match(Matchers.containsInAnyOrder(expectedItems));
+//        match(Matchers.containsInAnyOrder(expectedItems));
     }
 
     public void toHaveItems(T... expectedItems) {

@@ -1,17 +1,11 @@
 package com.pivotallabs.greatexpectations;
 
-import org.hamcrest.Matchers;
-
-public class BooleanExpectation extends BaseExpectation<Boolean, BooleanExpectation> {
-    public BooleanExpectation(Boolean actual) {
-        super(actual);
+public class BooleanExpectation<T extends Boolean, M extends BooleanExpectation<T, M>> extends ObjectExpectation<T, M> {
+    public boolean toBeTrue() {
+        return actual.equals(true);
     }
 
-    public void toBeTrue() {
-        match(Matchers.equalTo(true));
-    }
-
-    public void toBeFalse() {
-        match(Matchers.equalTo(false));
+    public boolean toBeFalse() {
+        return actual.equals(false);
     }
 }

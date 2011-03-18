@@ -1,19 +1,13 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.matchers.DateMatcher;
-
 import java.util.Date;
 
-public class DateExpectation extends BaseExpectation<Date, DateExpectation> {
-    public DateExpectation(Date actual) {
-        super(actual);
-    }
-
+public class DateExpectation<T extends Date, M extends DateExpectation<T, M>> extends ObjectExpectation<T, M> {
     public void toBeLaterThan(Date expectedDateThreshold) {
-        match(DateMatcher.isOlderThan(expectedDateThreshold));
+//        match(DateMatcher.isOlderThan(expectedDateThreshold));
     }
 
     public void toBeSoonerThan(Date expectedDateThreshold) {
-        match(DateMatcher.isSoonerThan(expectedDateThreshold));
+//        match(DateMatcher.isSoonerThan(expectedDateThreshold));
     }
 }
