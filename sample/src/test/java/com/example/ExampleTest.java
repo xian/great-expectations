@@ -12,7 +12,7 @@ public class ExampleTest {
   public void expect_shouldCompile() throws Exception {
     expect(Boolean.FALSE).toBeTrue();
     expect("boo").toContain("oo");
-//    expect(123).toBeGreaterThan(1);
+    expect(123).toBeGreaterThan(1);
     expect(Arrays.asList(1, 2, 3)).toContain(1);
   }
 
