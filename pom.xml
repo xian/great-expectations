@@ -1,128 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>5</version>
-    </parent>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>5</version>
+  </parent>
 
-    <groupId>com.github.xian</groupId>
-    <artifactId>great-expectations</artifactId>
-    <version>0.7-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>great-expectations</name>
-    <description>Jasmine-style expect() for Java.</description>
-    <url>http://github.com/xian/great-expectations/</url>
+  <groupId>com.github.xian</groupId>
+  <artifactId>great-expectations</artifactId>
+  <version>0.7-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>great-expectations</name>
+  <description>Jasmine-style expect() for Java.</description>
+  <url>http://github.com/xian/great-expectations/</url>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.14.0-GA</version>
+    </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/Test*.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <excludes>
+            <exclude>**/Test*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
 
-    <scm>
-        <url>git@github.com:xian/robolectric.git</url>
-        <connection>scm:git:git://github.com/xian/robolectric.git</connection>
-        <developerConnection>scm:git:git@github.com:xian/robolectric.git</developerConnection>
-    </scm>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
-    <ciManagement>
-        <system>Hudson</system>
-        <url>http://cibuilder.pivotallabs.com:8080/job/robolectric/</url>
-    </ciManagement>
+  <scm>
+    <url>git@github.com:xian/robolectric.git</url>
+    <connection>scm:git:git://github.com/xian/robolectric.git</connection>
+    <developerConnection>scm:git:git@github.com:xian/robolectric.git
+    </developerConnection>
+  </scm>
 
-    <developers>
-        <developer>
-            <id>xian</id>
-            <name>Christian Williams</name>
-            <email>antixian666@gmail.com</email>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <timezone>PST/PDT</timezone>
-        </developer>
-    </developers>
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://cibuilder.pivotallabs.com:8080/job/robolectric/</url>
+  </ciManagement>
 
-    <licenses>
-        <license>
-            <name>MIT license</name>
-            <comments>
-                The MIT License
+  <developers>
+    <developer>
+      <id>xian</id>
+      <name>Christian Williams</name>
+      <email>antixian666@gmail.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>PST/PDT</timezone>
+    </developer>
+  </developers>
 
-                Copyright (c) 2010 Christian Williams
+  <licenses>
+    <license>
+      <name>MIT license</name>
+      <comments>
+        The MIT License
 
-                Permission is hereby granted, free of charge, to any person obtaining a copy
-                of this software and associated documentation files (the "Software"), to deal
-                in the Software without restriction, including without limitation the rights
-                to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-                copies of the Software, and to permit persons to whom the Software is
-                furnished to do so, subject to the following conditions:
+        Copyright (c) 2010 Christian Williams
 
-                The above copyright notice and this permission notice shall be included in
-                all copies or substantial portions of the Software.
+        Permission is hereby granted, free of charge, to any person obtaining a
+        copy
+        of this software and associated documentation files (the "Software"), to
+        deal
+        in the Software without restriction, including without limitation the
+        rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or
+        sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
 
-                THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-                IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-                FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-                LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-                OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-                THE SOFTWARE.
-            </comments>
-        </license>
-    </licenses>
+        The above copyright notice and this permission notice shall be included
+        in
+        all copies or substantial portions of the Software.
+
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+        OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+        THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+        FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+        IN
+        THE SOFTWARE.
+      </comments>
+    </license>
+  </licenses>
 </project>
