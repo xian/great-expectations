@@ -9,6 +9,10 @@ import javassist.Loader;
 import javassist.NotFoundException;
 import javassist.Translator;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class GreatExpectations {
 
   public static RuntimeException lastExpectTrace = null;
@@ -45,11 +49,23 @@ public class GreatExpectations {
   }
 
   @SuppressWarnings({"UnusedDeclaration"})
-  public static boolean wrap(BaseExpectation baseExpectation, String methodName, boolean result) {
+  public static boolean wrap(BaseExpectation baseExpectation, String methodName, boolean result, Object[] expectArgs) {
     GreatExpectations.lastExpectTrace = null;
 
     if (!result) {
-      throw new AssertionError("Failure: Expected " + baseExpectation.actual + " " + methodName + " " + result);
+      StringBuilder message = new StringBuilder();
+      message
+          .append("Failure: Expected ")
+          .append(baseExpectation.actual)
+          .append(" ")
+          .append(methodName);
+
+      for (int i = 0, expectArgsLength = expectArgs.length; i < expectArgsLength; i++) {
+        Object expectArg = expectArgs[i];
+        message.append(i == 0 ? " " : ", ");
+        message.append(expectArg);
+      }
+      throw new AssertionError(message.toString());
     }
     return true;
   }
@@ -118,7 +134,7 @@ public class GreatExpectations {
       if (className.endsWith(WRAPPER_SUFFIX)) {
         CtClass ctParentClass = classPool.get(className.substring(0, className.length() - WRAPPER_SUFFIX.length()));
 
-        System.out.println("ctParentClass = " + ctParentClass);
+        System.out.println("ctParentClass = " + ctParentClass.getName());
 
         CtClass ctClass = classPool.makeClass(className, ctParentClass);
 
@@ -134,6 +150,11 @@ public class GreatExpectations {
         }
 
         System.out.println("***OUT ctClass = " + ctClass);
+        try {
+          ctClass.toBytecode(new DataOutputStream(new FileOutputStream("/tmp/" + ctClass.getName())));
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
 
@@ -157,7 +178,15 @@ public class GreatExpectations {
       }
 
       methodBody
-          .append("));\n")
+          .append("), new Object[] {");
+
+      for (int i = 0; i < paramCount; i++) {
+        if (i > 0) methodBody.append(", ");
+        methodBody.append("$").append(i + 1);
+      }
+
+      methodBody
+          .append("});\n")
           .append("}");
 
       System.out.println("declaring " + ctMethod.getReturnType().getName() + " "

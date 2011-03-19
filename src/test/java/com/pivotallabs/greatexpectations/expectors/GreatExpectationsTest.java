@@ -20,10 +20,22 @@ public class GreatExpectationsTest {
   public void whenMatcherReturnsFalse_shouldStopTestWithFailure() throws Exception {
     expectFailure(new Runnable() {
       public void run() {
-        expect(true).doFail(false);
+        expect(true).doFail("expectedValue");
         transcript.add("test is still running");
       }
-    }, "Failure: Expected true doFail false");
+    }, "Failure: Expected true doFail expectedValue");
+
+    transcript.assertNothingSoFar();
+  }
+
+  @Test
+  public void whenInvertedMatcherReturnsTrue_shouldStopTestWithFailure() throws Exception {
+    expectFailure(new Runnable() {
+      public void run() {
+        expect(true).not.doPass("expectedValue");
+        transcript.add("test is still running");
+      }
+    }, "Failure: Expected true not doFail expectedValue");
 
     transcript.assertNothingSoFar();
   }

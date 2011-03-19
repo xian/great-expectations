@@ -26,6 +26,14 @@ public class ExampleTest {
 
   @Test
   public void boolFail() throws Exception {
+//    BooleanExpectation$$wrapper wrapper = new BooleanExpectation$$wrapper();
+//    wrapper.toEqual(3);
+    
     expect(Boolean.TRUE).toBeFalse();
+  }
+
+  @Test
+  public void stringCompareFail() throws Exception {
+    expect("this string").toContain("that string");
   }
 }
