@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations;
+package com.pivotallabs.greatexpectations.expectors;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -59,7 +59,7 @@ public class GreatExpectations {
   }
 
   public static <T, M extends BaseExpectation<T, M>> M wrapped(Class<M> expectationClass, T actual) {
-    com.pivotallabs.greatexpectations.GreatExpectations.checkForUnfinishedExpect();
+    GreatExpectations.checkForUnfinishedExpect();
     GreatExpectations.lastExpectTrace = new RuntimeException("you called expect() without a matcher!");
 
 //        LOADER.delegateLoadingOf(expectationClass.getName());

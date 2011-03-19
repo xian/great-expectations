@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations;
+package com.pivotallabs.greatexpectations.expectors;
 
 import org.junit.Before;
 import org.junit.Test;

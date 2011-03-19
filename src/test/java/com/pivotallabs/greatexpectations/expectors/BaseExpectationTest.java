@@ -1,10 +1,11 @@
-package com.pivotallabs.greatexpectations;
+package com.pivotallabs.greatexpectations.expectors;
 
+import com.pivotallabs.greatexpectations.expectors.BaseExpectation;
 import com.pivotallabs.greatexpectations.util.Transcript;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.pivotallabs.greatexpectations.GreatExpectations.wrapped;
+import static com.pivotallabs.greatexpectations.expectors.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

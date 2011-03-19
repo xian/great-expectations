@@ -1,5 +1,8 @@
-package com.pivotallabs.greatexpectations;
+package com.pivotallabs.greatexpectations.expectors;
 
+import com.pivotallabs.greatexpectations.ExpectationOn;
+
+@ExpectationOn(Object.class)
 public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends BaseExpectation<T, M> {
   public boolean toEqual(T expected) {
     return actual.equals(expected);

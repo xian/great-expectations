@@ -1,7 +1,9 @@
-package com.pivotallabs.greatexpectations;
+package com.pivotallabs.greatexpectations.expectors;
 
+import com.pivotallabs.greatexpectations.ExpectationOn;
 import org.junit.ComparisonFailure;
 
+@ExpectationOn(String.class)
 public class StringExpectation<T extends String, M extends StringExpectation<T, M>> extends ObjectExpectation<T, M> {
   public void toContain(String expected) {
 //        match(Matchers.containsString(expected));
