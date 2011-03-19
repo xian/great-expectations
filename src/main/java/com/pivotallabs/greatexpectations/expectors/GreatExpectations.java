@@ -69,7 +69,8 @@ public class GreatExpectations {
       LOADER.delegateLoadingOf(expectationClass.getName());
       expectationClass = (Class<M>) LOADER.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
+//      e.printStackTrace();
+      throw new RuntimeException(e);
     }
     try {
       M matcher = expectationClass.newInstance();
@@ -87,7 +88,7 @@ public class GreatExpectations {
     }
   }
 
-  private static class MyTranslator implements Translator {
+  static class MyTranslator implements Translator {
     private CtClass objectCtClass;
     private CtMethod traceCtMethod;
 
@@ -124,14 +125,44 @@ public class GreatExpectations {
         for (CtMethod ctMethod : ctParentClass.getMethods()) {
           boolean isOnObject = ctMethod.getDeclaringClass().equals(objectCtClass);
           if (!isOnObject && ctMethod.getReturnType().equals(CtClass.booleanType)) {
-            ctClass.addMethod(CtNewMethod.make(CtClass.booleanType, ctMethod.getName(),
+            String methodBody = wrapMethodBody(ctMethod);
+            CtMethod method = CtNewMethod.make(CtClass.booleanType, ctMethod.getName(),
                 ctMethod.getParameterTypes(), ctMethod.getExceptionTypes(),
-                "{ return " + GreatExpectations.class.getName() + ".wrap(this, \"" + ctMethod.getName() + "\", super." + ctMethod.getName() + "($1)); }", ctClass));
+                methodBody, ctClass);
+            ctClass.addMethod(method);
           }
         }
 
         System.out.println("***OUT ctClass = " + ctClass);
       }
+    }
+
+    String wrapMethodBody(CtMethod ctMethod) throws NotFoundException {
+
+      StringBuilder methodBody = new StringBuilder();
+      methodBody
+          .append("{\n")
+          .append("  return ")
+          .append(GreatExpectations.class.getName())
+          .append(".wrap(this, \"")
+          .append(ctMethod.getName())
+          .append("\", super.")
+          .append(ctMethod.getName())
+          .append("(");
+
+      int paramCount = ctMethod.getParameterTypes().length;
+      for (int i = 0; i < paramCount; i++) {
+        if (i > 0) methodBody.append(", ");
+        methodBody.append("$").append(i + 1);
+      }
+
+      methodBody
+          .append("));\n")
+          .append("}");
+
+      System.out.println("declaring " + ctMethod.getReturnType().getName() + " "
+          + ctMethod.getName() + " " + ctMethod.getSignature() + " " + methodBody.toString());
+      return methodBody.toString();
     }
 
   }

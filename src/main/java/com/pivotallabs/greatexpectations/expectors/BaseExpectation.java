@@ -5,10 +5,6 @@ public class BaseExpectation<T, M extends BaseExpectation<T, M>> {
   protected T actual;
   protected boolean inverted;
 
-  public T getActual() {
-    return actual;
-  }
-
   //    protected void match(Matcher<T> matcher) {
 //        GreatExpectations.lastExpectTrace = null;
 //        Assert.assertThat(actual, inverted ? Matchers.not(matcher) : matcher);

@@ -1,6 +1,5 @@
 package com.pivotallabs.greatexpectations.expectors;
 
-import com.pivotallabs.greatexpectations.expectors.BaseExpectation;
 import com.pivotallabs.greatexpectations.util.Transcript;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +8,7 @@ import static com.pivotallabs.greatexpectations.expectors.GreatExpectations.wrap
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class BaseExpectationTest {
+public class GreatExpectationsTest {
   private Transcript transcript;
 
   @Before

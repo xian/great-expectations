@@ -23,4 +23,9 @@ public class ExampleTest {
 
     e.toContain(1);
   }
+
+  @Test
+  public void boolFail() throws Exception {
+    expect(Boolean.TRUE).toBeFalse();
+  }
 }
