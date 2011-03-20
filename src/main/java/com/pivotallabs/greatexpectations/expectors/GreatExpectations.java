@@ -43,7 +43,7 @@ public class GreatExpectations {
 
   public static boolean equalsSafely(String expected, String actual) {
     if (expected == null) {
-      return actual == null;
+      return false;
     }
     return expected.equals(actual);
   }
@@ -52,18 +52,20 @@ public class GreatExpectations {
   public static boolean wrap(BaseExpectation baseExpectation, String methodName, boolean result, Object[] expectArgs) {
     GreatExpectations.lastExpectTrace = null;
 
-    if (!result) {
+    if (result == baseExpectation.inverted) {
       StringBuilder message = new StringBuilder();
       message
           .append("Failure: Expected ")
           .append(baseExpectation.actual)
-          .append(" ")
+          .append(baseExpectation.inverted ? " not " : " ")
           .append(methodName);
 
-      for (int i = 0, expectArgsLength = expectArgs.length; i < expectArgsLength; i++) {
-        Object expectArg = expectArgs[i];
-        message.append(i == 0 ? " " : ", ");
-        message.append(expectArg);
+      if (expectArgs != null) {
+        for (int i = 0; i < expectArgs.length; i++) {
+          Object expectArg = expectArgs[i];
+          message.append(i == 0 ? " " : ", ");
+          message.append(expectArg);
+        }
       }
       throw new AssertionError(message.toString());
     }
@@ -81,7 +83,6 @@ public class GreatExpectations {
 //        LOADER.delegateLoadingOf(expectationClass.getName());
 //
     try {
-      System.out.println("Instrumenting " + expectationClass);
       LOADER.delegateLoadingOf(expectationClass.getName());
       expectationClass = (Class<M>) LOADER.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
     } catch (ClassNotFoundException e) {
@@ -115,26 +116,8 @@ public class GreatExpectations {
     }
 
     public void onLoad(ClassPool classPool, String className) throws NotFoundException, CannotCompileException {
-      System.out.println("className = " + className);
-
-//            CodeConverter codeConverter = new CodeConverter();
-//            for (CtMethod ctMethod : classPool.getCtClass(className).getMethods()) {
-//                boolean isOnObject = ctMethod.getDeclaringClass().equals(classPool.get("java.lang.Object"));
-//                if (!isOnObject && ctMethod.getReturnType().equals(CtClass.booleanType)) {
-//                    System.out.println("Instrumenting " + ctMethod);
-//                    codeConverter.insertAfterMethod(ctMethod, traceCtMethod);
-////                                System.out.println("ctMethod = " + ctMethod);
-////                                ctClass.addMethod(CtNewMethod.make(CtClass.booleanType, ctMethod.getName(),
-////                                        ctMethod.getParameterTypes(), ctMethod.getExceptionTypes(),
-////                                        "{ return " + CLASS_NAME + ".wrap(\"" + ctMethod.getName() + "\", super." + ctMethod.getName() + "($1)); }", ctClass));
-//                }
-//            }
-
-
       if (className.endsWith(WRAPPER_SUFFIX)) {
         CtClass ctParentClass = classPool.get(className.substring(0, className.length() - WRAPPER_SUFFIX.length()));
-
-        System.out.println("ctParentClass = " + ctParentClass.getName());
 
         CtClass ctClass = classPool.makeClass(className, ctParentClass);
 
@@ -142,16 +125,16 @@ public class GreatExpectations {
           boolean isOnObject = ctMethod.getDeclaringClass().equals(objectCtClass);
           if (!isOnObject && ctMethod.getReturnType().equals(CtClass.booleanType)) {
             String methodBody = wrapMethodBody(ctMethod);
-            CtMethod method = CtNewMethod.make(CtClass.booleanType, ctMethod.getName(),
+            CtMethod method = CtNewMethod.make(
+                CtClass.booleanType, ctMethod.getName(),
                 ctMethod.getParameterTypes(), ctMethod.getExceptionTypes(),
                 methodBody, ctClass);
             ctClass.addMethod(method);
           }
         }
 
-        System.out.println("***OUT ctClass = " + ctClass);
         try {
-          ctClass.toBytecode(new DataOutputStream(new FileOutputStream("/tmp/" + ctClass.getName())));
+          ctClass.toBytecode(new DataOutputStream(new FileOutputStream("/tmp/" + ctClass.getName() + ".class")));
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
@@ -178,19 +161,25 @@ public class GreatExpectations {
       }
 
       methodBody
-          .append("), new Object[] {");
+          .append("), ");
 
-      for (int i = 0; i < paramCount; i++) {
-        if (i > 0) methodBody.append(", ");
-        methodBody.append("$").append(i + 1);
+      if (paramCount > 0) {
+        methodBody
+            .append("new Object[] {");
+        for (int i = 0; i < paramCount; i++) {
+          if (i > 0) methodBody.append(", ");
+          methodBody.append("$").append(i + 1);
+        }
+        methodBody
+            .append("}");
+      } else {
+        methodBody
+            .append("null");
       }
-
-      methodBody
-          .append("});\n")
+      
+      methodBody.append(");\n")
           .append("}");
 
-      System.out.println("declaring " + ctMethod.getReturnType().getName() + " "
-          + ctMethod.getName() + " " + ctMethod.getSignature() + " " + methodBody.toString());
       return methodBody.toString();
     }
 

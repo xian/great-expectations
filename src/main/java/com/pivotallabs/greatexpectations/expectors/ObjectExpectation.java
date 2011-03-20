@@ -5,6 +5,7 @@ import com.pivotallabs.greatexpectations.ExpectationOn;
 @ExpectationOn(Object.class)
 public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends BaseExpectation<T, M> {
   public boolean toEqual(T expected) {
+    if (actual == null) return false;
     return actual.equals(expected);
   }
 

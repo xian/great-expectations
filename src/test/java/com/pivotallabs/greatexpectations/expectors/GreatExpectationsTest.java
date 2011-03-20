@@ -35,9 +35,14 @@ public class GreatExpectationsTest {
         expect(true).not.doPass("expectedValue");
         transcript.add("test is still running");
       }
-    }, "Failure: Expected true not doFail expectedValue");
+    }, "Failure: Expected true not doPass expectedValue");
 
     transcript.assertNothingSoFar();
+  }
+
+  @Test
+  public void whenExpectationThrowsException2_shouldReportItWithNiceMessage() throws Exception {
+    expect(true).doThrow(new RuntimeException("fake exception"));
   }
 
   @Test
