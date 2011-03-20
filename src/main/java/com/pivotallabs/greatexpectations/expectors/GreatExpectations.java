@@ -1,36 +1,30 @@
 package com.pivotallabs.greatexpectations.expectors;
 
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
-import javassist.Loader;
-import javassist.NotFoundException;
-import javassist.Translator;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.GeneratorAdapter;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
+
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.V1_5;
 
 public class GreatExpectations {
 
   public static RuntimeException lastExpectTrace = null;
-  private static final Loader LOADER;
   private static final String WRAPPER_SUFFIX = "$$wrapper";
+  private static ClassLoader wrappingClassLoader;
 
   static {
-    LOADER = new Loader();
-    LOADER.delegateLoadingOf(GreatExpectations.class.getName());
-    LOADER.delegateLoadingOf(BaseExpectation.class.getName());
-
-    try {
-      LOADER.addTranslator(new ClassPool(true), new MyTranslator());
-    } catch (NotFoundException e) {
-      throw new RuntimeException(e);
-    } catch (CannotCompileException e) {
-      throw new RuntimeException(e);
-    }
+    wrappingClassLoader = new WrappingClassLoader(GreatExpectations.class.getClassLoader());
   }
 
   public static void checkForUnfinishedExpect() {
@@ -82,18 +76,12 @@ public class GreatExpectations {
 
 //        LOADER.delegateLoadingOf(expectationClass.getName());
 //
+    Class<M> wrappedExpectationClass = loadExpector(expectationClass);
     try {
-      LOADER.delegateLoadingOf(expectationClass.getName());
-      expectationClass = (Class<M>) LOADER.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
-    } catch (ClassNotFoundException e) {
-//      e.printStackTrace();
-      throw new RuntimeException(e);
-    }
-    try {
-      M matcher = expectationClass.newInstance();
+      M matcher = wrappedExpectationClass.newInstance();
       matcher.actual = actual;
 
-      matcher.not = expectationClass.newInstance();
+      matcher.not = wrappedExpectationClass.newInstance();
       matcher.not.inverted = true;
       matcher.not.actual = actual;
 
@@ -105,83 +93,92 @@ public class GreatExpectations {
     }
   }
 
-  static class MyTranslator implements Translator {
-    private CtClass objectCtClass;
-    private CtMethod traceCtMethod;
+  private static <M extends BaseExpectation> Class<M> loadExpector(Class<M> expectationClass) {
+    try {
+      return (Class<M>) wrappingClassLoader.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-    public void start(ClassPool classPool) throws NotFoundException, CannotCompileException {
-      objectCtClass = classPool.get(Object.class.getName());
-      CtClass greatExpectationsCtClass = classPool.get(GreatExpectations.class.getName());
-      traceCtMethod = greatExpectationsCtClass.getDeclaredMethod("trace");
+  private static class WrappingClassLoader extends ClassLoader {
+    protected WrappingClassLoader(ClassLoader classLoader) {
+      super(classLoader);
     }
 
-    public void onLoad(ClassPool classPool, String className) throws NotFoundException, CannotCompileException {
+    @Override
+    protected Class<?> findClass(String className) throws ClassNotFoundException {
       if (className.endsWith(WRAPPER_SUFFIX)) {
-        CtClass ctParentClass = classPool.get(className.substring(0, className.length() - WRAPPER_SUFFIX.length()));
+        Class<?> parentClass = loadClass(className.substring(0, className.length() - WRAPPER_SUFFIX.length()));
 
-        CtClass ctClass = classPool.makeClass(className, ctParentClass);
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        cw.visit(V1_5, ACC_PUBLIC,
+            classRef(className), null, classRef(parentClass),
+            new String[]{});
 
-        for (CtMethod ctMethod : ctParentClass.getMethods()) {
-          boolean isOnObject = ctMethod.getDeclaringClass().equals(objectCtClass);
-          if (!isOnObject && ctMethod.getReturnType().equals(CtClass.booleanType)) {
-            String methodBody = wrapMethodBody(ctMethod);
-            CtMethod method = CtNewMethod.make(
-                CtClass.booleanType, ctMethod.getName(),
-                ctMethod.getParameterTypes(), ctMethod.getExceptionTypes(),
-                methodBody, ctClass);
-            ctClass.addMethod(method);
+        MethodVisitor constructor = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+        constructor.visitCode();
+        constructor.visitVarInsn(ALOAD, 0);
+        constructor.visitMethodInsn(INVOKESPECIAL, classRef(parentClass), "<init>", "()V");
+        constructor.visitInsn(RETURN);
+        constructor.visitMaxs(1, 1);
+        constructor.visitEnd();
+
+        for (Method method : parentClass.getMethods()) {
+          if (method.getDeclaringClass().getName().equals(Object.class.getName()))
+            continue;
+
+          if (!method.getReturnType().equals(Boolean.TYPE)) {
+            throw new IllegalArgumentException("wrong return type for " + method);
           }
+
+          System.out.println("method = " + method);
+
+
+          MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, method.getName(),
+              Type.getMethodDescriptor(method), null, null);
+          GeneratorAdapter generatorAdapter = new GeneratorAdapter(mv,
+              ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method));
+
+          generatorAdapter.visitCode();
+
+          generatorAdapter.loadThis(); // wrap arg 0
+          generatorAdapter.push(method.getName()); // wrap arg 1
+
+          generatorAdapter.visitVarInsn(ALOAD, 0); // super this
+          generatorAdapter.loadArgs(); // super args
+          mv.visitMethodInsn(INVOKESPECIAL,
+              classRef(method.getDeclaringClass()), method.getName(),
+              Type.getMethodDescriptor(method)); // invoke super, wrap arg 2
+
+          generatorAdapter.loadArgArray(); // wrap arg 3
+
+          generatorAdapter.visitMethodInsn(INVOKESTATIC, "com/pivotallabs/greatexpectations/expectors/GreatExpectations", "wrap", "(Lcom/pivotallabs/greatexpectations/expectors/BaseExpectation;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
+          generatorAdapter.returnValue();
+          generatorAdapter.endMethod();
         }
 
+        cw.visitEnd();
+        byte[] b = cw.toByteArray();
+
         try {
-          ctClass.toBytecode(new DataOutputStream(new FileOutputStream("/tmp/" + ctClass.getName() + ".class")));
+          new DataOutputStream(new FileOutputStream("/tmp/" + className + "ASM.class")).write(b);
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
-      }
-    }
 
-    String wrapMethodBody(CtMethod ctMethod) throws NotFoundException {
-
-      StringBuilder methodBody = new StringBuilder();
-      methodBody
-          .append("{\n")
-          .append("  return ")
-          .append(GreatExpectations.class.getName())
-          .append(".wrap(this, \"")
-          .append(ctMethod.getName())
-          .append("\", super.")
-          .append(ctMethod.getName())
-          .append("(");
-
-      int paramCount = ctMethod.getParameterTypes().length;
-      for (int i = 0; i < paramCount; i++) {
-        if (i > 0) methodBody.append(", ");
-        methodBody.append("$").append(i + 1);
-      }
-
-      methodBody
-          .append("), ");
-
-      if (paramCount > 0) {
-        methodBody
-            .append("new Object[] {");
-        for (int i = 0; i < paramCount; i++) {
-          if (i > 0) methodBody.append(", ");
-          methodBody.append("$").append(i + 1);
-        }
-        methodBody
-            .append("}");
+        return defineClass(className, b, 0, b.length);
       } else {
-        methodBody
-            .append("null");
+        return super.findClass(className);
       }
-      
-      methodBody.append(");\n")
-          .append("}");
-
-      return methodBody.toString();
     }
 
+    private String classRef(String className) {
+      return className.replace('.', '/');
+    }
+
+    private String classRef(Class clazz) {
+      return Type.getInternalName(clazz);
+    }
   }
 }

@@ -9,15 +9,18 @@ public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends Bas
     return actual.equals(expected);
   }
 
-  public void toBe(T expected) {
+  public boolean toBe(T expected) {
+    return false;
 //        match(Matchers.sameInstance(expected));
   }
 
-  public void toBeInstanceOf(Class<? extends T> expected) {
+  public boolean toBeInstanceOf(Class<? extends T> expected) {
+    return false;
 //        match(Matchers.<T>instanceOf(expected));
   }
 
-  public void toBeNull() {
+  public boolean toBeNull() {
+    return false;
 //        match((Matcher<T>) Matchers.nullValue());
   }
 }

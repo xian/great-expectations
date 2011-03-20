@@ -15,4 +15,12 @@ public class StringExpectation<T extends String, M extends StringExpectation<T, 
 //    }
 //    return actual.equals(expected);
 //  }
+
+  public boolean toBeTrue() {
+    return false;
+  }
+
+  public boolean toBeFalse(int a, String b, boolean c) {
+    return false;
+  }
 }

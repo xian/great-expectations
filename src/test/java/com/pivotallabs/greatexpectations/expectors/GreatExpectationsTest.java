@@ -20,7 +20,7 @@ public class GreatExpectationsTest {
   public void whenMatcherReturnsFalse_shouldStopTestWithFailure() throws Exception {
     expectFailure(new Runnable() {
       public void run() {
-        expect(true).doFail("expectedValue");
+        testExpect(true).doFail("expectedValue");
         transcript.add("test is still running");
       }
     }, "Failure: Expected true doFail expectedValue");
@@ -32,7 +32,7 @@ public class GreatExpectationsTest {
   public void whenInvertedMatcherReturnsTrue_shouldStopTestWithFailure() throws Exception {
     expectFailure(new Runnable() {
       public void run() {
-        expect(true).not.doPass("expectedValue");
+        testExpect(true).not.doPass("expectedValue");
         transcript.add("test is still running");
       }
     }, "Failure: Expected true not doPass expectedValue");
@@ -42,20 +42,35 @@ public class GreatExpectationsTest {
 
   @Test
   public void whenExpectationThrowsException2_shouldReportItWithNiceMessage() throws Exception {
-    expect(true).doThrow(new RuntimeException("fake exception"));
+    testExpect(true).doThrow(new RuntimeException("fake exception"));
   }
 
   @Test
   public void whenExpectationThrowsException_shouldReportItWithNiceMessage() throws Exception {
     expectException(new Runnable() {
       public void run() {
-        expect(true).doThrow(new RuntimeException("fake exception"));
+        testExpect(true).doThrow(new RuntimeException("fake exception"));
         transcript.add("test is still running");
       }
     }, "Error: fake exception\nExpected true doThrow false");
 
     transcript.assertNothingSoFar();
   }
+
+  @Test
+  public void shouldInvokeMethodsFromSuperclassesCorrectly() throws Exception {
+    testExpect("abc").toFromSuper();
+
+    expectFailure(new Runnable() {
+      public void run() {
+        testExpect("abc").not.toFromSuper();
+        transcript.add("test is still running");
+      }
+    }, "Failure: Expected abc not toFromSuper");
+    transcript.assertNothingSoFar();
+  }
+
+  ////////////////
 
   private void expectFailure(Runnable runnable, String expectedMessage) {
     AssertionError e = null;
@@ -79,11 +94,17 @@ public class GreatExpectationsTest {
     assertEquals(expectedMessage, e.getMessage());
   }
 
-  private static <T, M extends TestExpectation<T, M>> TestExpectation<T, M> expect(T actual) {
+  private static <T, M extends TestExpectation<T, M>> TestExpectation<T, M> testExpect(T actual) {
     return wrapped(TestExpectation.class, actual);
   }
 
-  public static class TestExpectation<T, M extends BaseExpectation<T, M>> extends BaseExpectation<T, M> {
+  public static class OTestExpectation<T, M extends BaseExpectation<T, M>> extends BaseExpectation<T, M> {
+    public boolean toFromSuper() {
+      return true;
+    }
+  }
+
+  public static class TestExpectation<T, M extends BaseExpectation<T, M>> extends OTestExpectation<T, M> {
     public boolean doPass(Object arg) {
       return true;
     }
