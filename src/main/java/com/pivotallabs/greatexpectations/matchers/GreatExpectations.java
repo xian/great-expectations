@@ -62,16 +62,16 @@ public class GreatExpectations {
     }
   }
 
-  public static <T, M extends BaseMatcher<T, M>> M wrapped(Class<M> expectationClass, T actual) {
+  public static <T, M extends BaseMatcher<T, M>> M wrapped(Class<M> matcherClass, T actual) {
     GreatExpectations.checkForUnfinishedExpect();
     GreatExpectations.lastExpectTrace = new RuntimeException("you called expect() without a matcher!");
 
-    Class<M> wrappedExpectationClass = loadExpector(expectationClass);
+    Class<M> wrappedMatcherClass = loadMatcher(matcherClass);
     try {
-      M matcher = wrappedExpectationClass.newInstance();
+      M matcher = wrappedMatcherClass.newInstance();
       matcher.actual = actual;
 
-      matcher.not = wrappedExpectationClass.newInstance();
+      matcher.not = wrappedMatcherClass.newInstance();
       matcher.not.inverted = true;
       matcher.not.actual = actual;
 
@@ -83,9 +83,9 @@ public class GreatExpectations {
     }
   }
 
-  private static <M extends BaseMatcher> Class<M> loadExpector(Class<M> expectationClass) {
+  private static <M extends BaseMatcher> Class<M> loadMatcher(Class<M> matcherClass) {
     try {
-      return (Class<M>) wrappingClassLoader.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
+      return (Class<M>) wrappingClassLoader.loadClass(matcherClass.getName() + WRAPPER_SUFFIX);
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     }

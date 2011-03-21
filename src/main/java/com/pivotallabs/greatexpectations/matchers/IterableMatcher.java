@@ -1,8 +1,8 @@
 package com.pivotallabs.greatexpectations.matchers;
 
-import com.pivotallabs.greatexpectations.ExpectationOn;
+import com.pivotallabs.greatexpectations.MatcherOf;
 
-@ExpectationOn(value = Iterable.class, directObject = true)
+@MatcherOf(value = Iterable.class, directObject = true)
 public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> extends BaseMatcher<T, M> {
   public boolean toContain(X... expectedItems) {
     int expectedIndex = 0;

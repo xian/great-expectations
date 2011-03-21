@@ -26,9 +26,9 @@ public class ExpectGenerator {
     out = System.out;
   }
 
-  public String generateFor(Class<? extends BaseMatcher> expectationClass) {
-    String name = className(expectationClass);
-    ExpectationOn annotation = expectationClass.getAnnotation(ExpectationOn.class);
+  public String generateFor(Class<? extends BaseMatcher> matcherClass) {
+    String name = className(matcherClass);
+    MatcherOf annotation = matcherClass.getAnnotation(MatcherOf.class);
 
     StringBuilder buf = new StringBuilder();
     for (Class targetClass : annotation.value()) {
@@ -91,13 +91,13 @@ public class ExpectGenerator {
     );
   }
 
-  private String className(Class<?> expectationClass) {
+  private String className(Class<?> matcherClass) {
     String name;
-    String packageName = expectationClass.getPackage().getName();
+    String packageName = matcherClass.getPackage().getName();
     if (packageName.equals("java.lang") || packageName.equals(defaultPackage)) {
-      name = expectationClass.getSimpleName();
+      name = matcherClass.getSimpleName();
     } else {
-      name = expectationClass.getName();
+      name = matcherClass.getName();
     }
     return name;
   }

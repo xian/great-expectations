@@ -1,8 +1,8 @@
 package com.pivotallabs.greatexpectations.matchers;
 
-import com.pivotallabs.greatexpectations.ExpectationOn;
+import com.pivotallabs.greatexpectations.MatcherOf;
 
-@ExpectationOn(String.class)
+@MatcherOf(String.class)
 public class StringMatcher<T extends String, M extends StringMatcher<T, M>> extends ObjectMatcher<T, M> {
   public boolean toContain(String expected) {
     return actual.indexOf(expected) != -1;

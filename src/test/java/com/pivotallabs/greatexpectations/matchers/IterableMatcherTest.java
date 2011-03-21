@@ -35,9 +35,9 @@ public class IterableMatcherTest {
   ///////////////////
 
   private <T extends Iterable<X>, X> IterableMatcher<T, X, ?> newExpect(T value) {
-    IterableMatcher<T, X, ?> iterableExpectation = new IterableMatcher();
-    iterableExpectation.actual = value;
-    return iterableExpectation;
+    IterableMatcher<T, X, ?> iterableMatcher = new IterableMatcher();
+    iterableMatcher.actual = value;
+    return iterableMatcher;
   }
 
 }

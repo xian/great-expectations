@@ -55,9 +55,9 @@ public class ObjectMatcherTest {
   ///////////////////
 
   private ObjectMatcher<Object, ?> newExpect(Object value) {
-    ObjectMatcher<Object, ?> objectExpectation = new ObjectMatcher();
-    objectExpectation.actual = value;
-    return objectExpectation;
+    ObjectMatcher<Object, ?> objectMatcher = new ObjectMatcher();
+    objectMatcher.actual = value;
+    return objectMatcher;
   }
 
   class A {

@@ -1,10 +1,10 @@
 package com.pivotallabs.greatexpectations.matchers;
 
-import com.pivotallabs.greatexpectations.ExpectationOn;
+import com.pivotallabs.greatexpectations.MatcherOf;
 
 import java.util.Date;
 
-@ExpectationOn(Date.class)
+@MatcherOf(Date.class)
 public class DateMatcher<T extends Date, M extends DateMatcher<T, M>> extends ObjectMatcher<T, M> {
   public void toBeLaterThan(Date expectedDateThreshold) {
 //        match(DateMatcher.isOlderThan(expectedDateThreshold));
