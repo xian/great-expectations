@@ -27,25 +27,8 @@ public class GreatExpectations {
     wrappingClassLoader = new WrappingClassLoader(GreatExpectations.class.getClassLoader());
   }
 
-  public static void checkForUnfinishedExpect() {
-    if (lastExpectTrace != null) {
-      RuntimeException e = lastExpectTrace;
-      lastExpectTrace = null;
-      throw e;
-    }
-  }
-
-  public static boolean equalsSafely(String expected, String actual) {
-    if (expected == null) {
-      return false;
-    }
-    return expected.equals(actual);
-  }
-
   @SuppressWarnings({"UnusedDeclaration"})
   public static boolean wrap(BaseExpectation baseExpectation, String methodName, boolean result, Object[] expectArgs) {
-    GreatExpectations.lastExpectTrace = null;
-
     if (result == baseExpectation.inverted) {
       StringBuilder message = new StringBuilder();
       message
@@ -66,16 +49,23 @@ public class GreatExpectations {
     return true;
   }
 
-  public static void trace(Object... o) {
-    System.out.println("Trace = " + o);
+  @SuppressWarnings({"UnusedDeclaration"})
+  public static void resetTrace() {
+    GreatExpectations.lastExpectTrace = null;
+  }
+
+  public static void checkForUnfinishedExpect() {
+    if (lastExpectTrace != null) {
+      RuntimeException e = lastExpectTrace;
+      lastExpectTrace = null;
+      throw e;
+    }
   }
 
   public static <T, M extends BaseExpectation<T, M>> M wrapped(Class<M> expectationClass, T actual) {
     GreatExpectations.checkForUnfinishedExpect();
     GreatExpectations.lastExpectTrace = new RuntimeException("you called expect() without a matcher!");
 
-//        LOADER.delegateLoadingOf(expectationClass.getName());
-//
     Class<M> wrappedExpectationClass = loadExpector(expectationClass);
     try {
       M matcher = wrappedExpectationClass.newInstance();
@@ -132,15 +122,15 @@ public class GreatExpectations {
             throw new IllegalArgumentException("wrong return type for " + method);
           }
 
-          System.out.println("method = " + method);
-
-
           MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, method.getName(),
               Type.getMethodDescriptor(method), null, null);
           GeneratorAdapter generatorAdapter = new GeneratorAdapter(mv,
               ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method));
 
           generatorAdapter.visitCode();
+
+          generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
+              new org.objectweb.asm.commons.Method("resetTrace", Type.VOID_TYPE, new Type[0]));
 
           generatorAdapter.loadThis(); // wrap arg 0
           generatorAdapter.push(method.getName()); // wrap arg 1
@@ -153,7 +143,8 @@ public class GreatExpectations {
 
           generatorAdapter.loadArgArray(); // wrap arg 3
 
-          generatorAdapter.visitMethodInsn(INVOKESTATIC, "com/pivotallabs/greatexpectations/expectors/GreatExpectations", "wrap", "(Lcom/pivotallabs/greatexpectations/expectors/BaseExpectation;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
+          generatorAdapter.visitMethodInsn(INVOKESTATIC, Type.getInternalName(GreatExpectations.class),
+              "wrap", "(Lcom/pivotallabs/greatexpectations/expectors/BaseExpectation;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
           generatorAdapter.returnValue();
           generatorAdapter.endMethod();
         }

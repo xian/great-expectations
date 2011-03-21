@@ -2,11 +2,13 @@ package com.pivotallabs.greatexpectations.expectors;
 
 import com.pivotallabs.greatexpectations.util.Transcript;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.pivotallabs.greatexpectations.expectors.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class GreatExpectationsTest {
   private Transcript transcript;
@@ -41,20 +43,22 @@ public class GreatExpectationsTest {
   }
 
   @Test
-  public void whenExpectationThrowsException2_shouldReportItWithNiceMessage() throws Exception {
-    newExpect(true).doThrow(new RuntimeException("fake exception"));
-  }
-
-  @Test
   public void whenExpectationThrowsException_shouldReportItWithNiceMessage() throws Exception {
     expectException(new Runnable() {
       public void run() {
         newExpect(true).doThrow(new RuntimeException("fake exception"));
         transcript.add("test is still running");
       }
-    }, "Error: fake exception\nExpected true doThrow false");
+    }, "java.lang.RuntimeException: fake exception");
 
     transcript.assertNothingSoFar();
+
+    assertNull(GreatExpectations.lastExpectTrace);
+  }
+
+  @Ignore @Test
+  public void whenExpectationThrowsException2_shouldReportItWithNiceMessage() throws Exception {
+    newExpect(true).doThrow(new RuntimeException("fake exception"));
   }
 
   @Test
