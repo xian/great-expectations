@@ -1,6 +1,6 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
-public class BaseExpectation<T, M extends BaseExpectation<T, M>> {
+public class BaseMatcher<T, M extends BaseMatcher<T, M>> {
   public M not;
   protected T actual;
   protected boolean inverted;

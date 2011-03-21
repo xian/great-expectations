@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import org.junit.Test;
 
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class IterableExpectationTest {
+public class IterableMatcherTest {
   @Test
   public void toContain() throws Exception {
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("a"));
@@ -34,8 +34,8 @@ public class IterableExpectationTest {
 
   ///////////////////
 
-  private <T extends Iterable<X>, X> IterableExpectation<T, X, ?> newExpect(T value) {
-    IterableExpectation<T, X, ?> iterableExpectation = new IterableExpectation();
+  private <T extends Iterable<X>, X> IterableMatcher<T, X, ?> newExpect(T value) {
+    IterableMatcher<T, X, ?> iterableExpectation = new IterableMatcher();
     iterableExpectation.actual = value;
     return iterableExpectation;
   }

@@ -1,9 +1,9 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.expectors.BooleanExpectation;
-import com.pivotallabs.greatexpectations.expectors.ComparableExpectation;
-import com.pivotallabs.greatexpectations.expectors.IterableExpectation;
-import com.pivotallabs.greatexpectations.expectors.ObjectExpectation;
+import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
+import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
+import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
+import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,33 +19,33 @@ public class ExpectGeneratorTest {
 
   @Test
   public void forObject_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Object, M extends ObjectExpectation<T, M>> ObjectExpectation<T, M> expect(T actual) {\n" +
-        "        return wrapped(ObjectExpectation.class, actual);\n" +
+    assertEquals("    public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, M> expect(T actual) {\n" +
+        "        return wrapped(ObjectMatcher.class, actual);\n" +
         "    }",
-        expectGenerator.generateFor(ObjectExpectation.class));
+        expectGenerator.generateFor(ObjectMatcher.class));
   }
 
   @Test
   public void forSubclass_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Boolean, M extends BooleanExpectation<T, M>> BooleanExpectation<T, M> expect(T actual) {\n" +
-        "        return wrapped(BooleanExpectation.class, actual);\n" +
+    assertEquals("    public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, M> expect(T actual) {\n" +
+        "        return wrapped(BooleanMatcher.class, actual);\n" +
         "    }",
-        expectGenerator.generateFor(BooleanExpectation.class));
+        expectGenerator.generateFor(BooleanMatcher.class));
   }
 
   @Test
   public void forGeneric_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Comparable, M extends ComparableExpectation<T, M>> ComparableExpectation<T, M> expect(T actual) {\n" +
-        "        return wrapped(ComparableExpectation.class, actual);\n" +
+    assertEquals("    public static <T extends Comparable, M extends ComparableMatcher<T, M>> ComparableMatcher<T, M> expect(T actual) {\n" +
+        "        return wrapped(ComparableMatcher.class, actual);\n" +
         "    }",
-        expectGenerator.generateFor(ComparableExpectation.class));
+        expectGenerator.generateFor(ComparableMatcher.class));
   }
 
   @Test
   public void forGeneric_shouldGenerateDirectObjectGeneric() throws Exception {
-    assertEquals("    public static <T extends Iterable<X>, X, M extends IterableExpectation<T, X, M>> IterableExpectation<T, X, M> expect(T actual) {\n" +
-        "        return wrapped(IterableExpectation.class, actual);\n" +
+    assertEquals("    public static <T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> IterableMatcher<T, X, M> expect(T actual) {\n" +
+        "        return wrapped(IterableMatcher.class, actual);\n" +
         "    }",
-        expectGenerator.generateFor(IterableExpectation.class));
+        expectGenerator.generateFor(IterableMatcher.class));
   }
 }

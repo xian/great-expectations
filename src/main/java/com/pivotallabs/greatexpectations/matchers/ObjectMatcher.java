@@ -1,9 +1,9 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import com.pivotallabs.greatexpectations.ExpectationOn;
 
 @ExpectationOn(Object.class)
-public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends BaseExpectation<T, M> {
+public class ObjectMatcher<T, M extends ObjectMatcher<T, M>> extends BaseMatcher<T, M> {
   public boolean toEqual(T expected) {
     return actual.equals(expected);
   }

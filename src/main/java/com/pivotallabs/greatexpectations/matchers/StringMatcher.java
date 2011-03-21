@@ -1,9 +1,9 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import com.pivotallabs.greatexpectations.ExpectationOn;
 
 @ExpectationOn(String.class)
-public class StringExpectation<T extends String, M extends StringExpectation<T, M>> extends ObjectExpectation<T, M> {
+public class StringMatcher<T extends String, M extends StringMatcher<T, M>> extends ObjectMatcher<T, M> {
   public boolean toContain(String expected) {
     return actual.indexOf(expected) != -1;
   }

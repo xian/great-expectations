@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -28,13 +28,13 @@ public class GreatExpectations {
   }
 
   @SuppressWarnings({"UnusedDeclaration"})
-  public static boolean wrap(BaseExpectation baseExpectation, String methodName, boolean result, Object[] expectArgs) {
-    if (result == baseExpectation.inverted) {
+  public static boolean wrap(BaseMatcher baseMatcher, String methodName, boolean result, Object[] expectArgs) {
+    if (result == baseMatcher.inverted) {
       StringBuilder message = new StringBuilder();
       message
           .append("Failure: Expected ")
-          .append(baseExpectation.actual)
-          .append(baseExpectation.inverted ? " not " : " ")
+          .append(baseMatcher.actual)
+          .append(baseMatcher.inverted ? " not " : " ")
           .append(methodName);
 
       if (expectArgs != null) {
@@ -62,7 +62,7 @@ public class GreatExpectations {
     }
   }
 
-  public static <T, M extends BaseExpectation<T, M>> M wrapped(Class<M> expectationClass, T actual) {
+  public static <T, M extends BaseMatcher<T, M>> M wrapped(Class<M> expectationClass, T actual) {
     GreatExpectations.checkForUnfinishedExpect();
     GreatExpectations.lastExpectTrace = new RuntimeException("you called expect() without a matcher!");
 
@@ -83,7 +83,7 @@ public class GreatExpectations {
     }
   }
 
-  private static <M extends BaseExpectation> Class<M> loadExpector(Class<M> expectationClass) {
+  private static <M extends BaseMatcher> Class<M> loadExpector(Class<M> expectationClass) {
     try {
       return (Class<M>) wrappingClassLoader.loadClass(expectationClass.getName() + WRAPPER_SUFFIX);
     } catch (ClassNotFoundException e) {
@@ -144,7 +144,7 @@ public class GreatExpectations {
           generatorAdapter.loadArgArray(); // wrap arg 3
 
           generatorAdapter.visitMethodInsn(INVOKESTATIC, Type.getInternalName(GreatExpectations.class),
-              "wrap", "(Lcom/pivotallabs/greatexpectations/expectors/BaseExpectation;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
+              "wrap", "(Lcom/pivotallabs/greatexpectations/matchers/BaseMatcher;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
           generatorAdapter.returnValue();
           generatorAdapter.endMethod();
         }

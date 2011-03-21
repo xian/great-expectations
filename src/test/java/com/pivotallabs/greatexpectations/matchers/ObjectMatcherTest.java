@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import org.junit.Test;
 
@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ObjectExpectationTest {
+public class ObjectMatcherTest {
   @Test
   public void toBe_shouldReturnTrueIffObjectsAreIdentical() throws Exception {
     String abc = "abc";
@@ -54,8 +54,8 @@ public class ObjectExpectationTest {
 
   ///////////////////
 
-  private ObjectExpectation<Object, ?> newExpect(Object value) {
-    ObjectExpectation<Object, ?> objectExpectation = new ObjectExpectation();
+  private ObjectMatcher<Object, ?> newExpect(Object value) {
+    ObjectMatcher<Object, ?> objectExpectation = new ObjectMatcher();
     objectExpectation.actual = value;
     return objectExpectation;
   }

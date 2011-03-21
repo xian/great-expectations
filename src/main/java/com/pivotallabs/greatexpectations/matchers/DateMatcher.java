@@ -1,3 +1,21 @@
+package com.pivotallabs.greatexpectations.matchers;
+
+import com.pivotallabs.greatexpectations.ExpectationOn;
+
+import java.util.Date;
+
+@ExpectationOn(Date.class)
+public class DateMatcher<T extends Date, M extends DateMatcher<T, M>> extends ObjectMatcher<T, M> {
+  public void toBeLaterThan(Date expectedDateThreshold) {
+//        match(DateMatcher.isOlderThan(expectedDateThreshold));
+  }
+
+  public void toBeSoonerThan(Date expectedDateThreshold) {
+//        match(DateMatcher.isSoonerThan(expectedDateThreshold));
+  }
+}
+
+
 //package com.pivotallabs.greatexpectations.matchers;
 //
 //import org.hamcrest.Description;

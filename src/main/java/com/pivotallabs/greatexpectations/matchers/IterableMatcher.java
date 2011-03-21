@@ -1,9 +1,9 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import com.pivotallabs.greatexpectations.ExpectationOn;
 
 @ExpectationOn(value = Iterable.class, directObject = true)
-public class IterableExpectation<T extends Iterable<X>, X, M extends IterableExpectation<T, X, M>> extends BaseExpectation<T, M> {
+public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> extends BaseMatcher<T, M> {
   public boolean toContain(X... expectedItems) {
     int expectedIndex = 0;
 

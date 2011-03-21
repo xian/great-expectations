@@ -1,11 +1,11 @@
-package com.pivotallabs.greatexpectations.expectors;
+package com.pivotallabs.greatexpectations.matchers;
 
 import com.pivotallabs.greatexpectations.util.Transcript;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.pivotallabs.greatexpectations.expectors.GreatExpectations.wrapped;
+import static com.pivotallabs.greatexpectations.matchers.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -98,17 +98,17 @@ public class GreatExpectationsTest {
     assertEquals(expectedMessage, e.getMessage());
   }
 
-  private static <T, M extends TestExpectation<T, M>> TestExpectation<T, M> newExpect(T actual) {
-    return wrapped(TestExpectation.class, actual);
+  private static <T, M extends TestMatcher<T, M>> TestMatcher<T, M> newExpect(T actual) {
+    return wrapped(TestMatcher.class, actual);
   }
 
-  public static class OTestExpectation<T, M extends BaseExpectation<T, M>> extends BaseExpectation<T, M> {
+  public static class OTestMatcher<T, M extends BaseMatcher<T, M>> extends BaseMatcher<T, M> {
     public boolean toFromSuper() {
       return true;
     }
   }
 
-  public static class TestExpectation<T, M extends BaseExpectation<T, M>> extends OTestExpectation<T, M> {
+  public static class TestMatcher<T, M extends BaseMatcher<T, M>> extends OTestMatcher<T, M> {
     public boolean doPass(Object arg) {
       return true;
     }

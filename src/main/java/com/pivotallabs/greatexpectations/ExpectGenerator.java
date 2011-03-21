@@ -1,13 +1,13 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.expectors.BaseExpectation;
-import com.pivotallabs.greatexpectations.expectors.BooleanExpectation;
-import com.pivotallabs.greatexpectations.expectors.ComparableExpectation;
-import com.pivotallabs.greatexpectations.expectors.DateExpectation;
-import com.pivotallabs.greatexpectations.expectors.GreatExpectations;
-import com.pivotallabs.greatexpectations.expectors.IterableExpectation;
-import com.pivotallabs.greatexpectations.expectors.ObjectExpectation;
-import com.pivotallabs.greatexpectations.expectors.StringExpectation;
+import com.pivotallabs.greatexpectations.matchers.BaseMatcher;
+import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
+import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
+import com.pivotallabs.greatexpectations.matchers.DateMatcher;
+import com.pivotallabs.greatexpectations.matchers.GreatExpectations;
+import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
+import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
+import com.pivotallabs.greatexpectations.matchers.StringMatcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,12 +21,12 @@ public class ExpectGenerator {
   private PrintStream out;
 
   public ExpectGenerator(String packageName) {
-    defaultPackage = BaseExpectation.class.getPackage().getName();
+    defaultPackage = BaseMatcher.class.getPackage().getName();
     this.packageName = packageName;
     out = System.out;
   }
 
-  public String generateFor(Class<? extends BaseExpectation> expectationClass) {
+  public String generateFor(Class<? extends BaseMatcher> expectationClass) {
     String name = className(expectationClass);
     ExpectationOn annotation = expectationClass.getAnnotation(ExpectationOn.class);
 
@@ -50,7 +50,7 @@ public class ExpectGenerator {
     return buf.toString();
   }
 
-  private void generate(List<Class<? extends BaseExpectation>> classes) {
+  private void generate(List<Class<? extends BaseMatcher>> classes) {
     out.println("package " + packageName + ";");
     out.println();
     out.println("import " + defaultPackage + ".*;");
@@ -58,7 +58,7 @@ public class ExpectGenerator {
     out.println();
 
     out.println("public class Expect {");
-    for (Class<? extends BaseExpectation> aClass : classes) {
+    for (Class<? extends BaseMatcher> aClass : classes) {
       out.println(generateFor(aClass));
     }
     out.println("}");
@@ -69,13 +69,13 @@ public class ExpectGenerator {
   }
 
   public static void main(String[] args) throws IOException {
-    List<Class<? extends BaseExpectation>> classes = Arrays.asList(
-        BooleanExpectation.class,
-        ComparableExpectation.class,
-        DateExpectation.class,
-        IterableExpectation.class,
-        ObjectExpectation.class,
-        StringExpectation.class
+    List<Class<? extends BaseMatcher>> classes = Arrays.asList(
+        BooleanMatcher.class,
+        ComparableMatcher.class,
+        DateMatcher.class,
+        IterableMatcher.class,
+        ObjectMatcher.class,
+        StringMatcher.class
     );
 
     ExpectGenerator expectGenerator = new ExpectGenerator(args[0]);
