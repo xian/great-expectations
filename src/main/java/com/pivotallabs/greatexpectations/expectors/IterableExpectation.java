@@ -5,8 +5,18 @@ import com.pivotallabs.greatexpectations.ExpectationOn;
 @ExpectationOn(value = Iterable.class, directObject = true)
 public class IterableExpectation<T extends Iterable<X>, X, M extends IterableExpectation<T, X, M>> extends BaseExpectation<T, M> {
   public boolean toContain(X... expectedItems) {
-    return true;
-//        match(Matchers.contains(expectedItems));
+    int expectedIndex = 0;
+
+    for (X x : actual) {
+      if (x.equals(expectedItems[expectedIndex])) {
+        expectedIndex++;
+      }
+
+      if (expectedIndex == expectedItems.length) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public boolean toContainInAnyOrder(X... expectedItems) {
@@ -14,15 +24,7 @@ public class IterableExpectation<T extends Iterable<X>, X, M extends IterableExp
 //        match(Matchers.containsInAnyOrder(expectedItems));
   }
 
-  public boolean toHaveItems(X... expectedItems) {
-    return true;
-    //noinspection unchecked
-//        match((Matcher) Matchers.hasItems(expectedItems));
-  }
-
   public boolean toBeEmpty() {
-    return true;
-    //noinspection unchecked
-//        match((Matcher) Matchers.emptyIterable());
+    return !actual.iterator().hasNext();
   }
 }

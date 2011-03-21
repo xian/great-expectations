@@ -5,7 +5,6 @@ import com.pivotallabs.greatexpectations.ExpectationOn;
 @ExpectationOn(Object.class)
 public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends BaseExpectation<T, M> {
   public boolean toEqual(T expected) {
-    if (actual == null) throw new NullPointerException("actual is null");
     return actual.equals(expected);
   }
 
@@ -15,12 +14,10 @@ public class ObjectExpectation<T, M extends ObjectExpectation<T, M>> extends Bas
   }
 
   public boolean toBeInstanceOf(Class<? extends T> expected) {
-    return false;
-//        match(Matchers.<T>instanceOf(expected));
+    return expected.isAssignableFrom(actual.getClass());
   }
 
   public boolean toBeNull() {
-    return false;
-//        match((Matcher<T>) Matchers.nullValue());
+    return actual == null;
   }
 }

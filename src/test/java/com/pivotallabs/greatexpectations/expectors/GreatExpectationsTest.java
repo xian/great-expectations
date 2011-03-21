@@ -20,7 +20,7 @@ public class GreatExpectationsTest {
   public void whenMatcherReturnsFalse_shouldStopTestWithFailure() throws Exception {
     expectFailure(new Runnable() {
       public void run() {
-        testExpect(true).doFail("expectedValue");
+        newExpect(true).doFail("expectedValue");
         transcript.add("test is still running");
       }
     }, "Failure: Expected true doFail expectedValue");
@@ -32,7 +32,7 @@ public class GreatExpectationsTest {
   public void whenInvertedMatcherReturnsTrue_shouldStopTestWithFailure() throws Exception {
     expectFailure(new Runnable() {
       public void run() {
-        testExpect(true).not.doPass("expectedValue");
+        newExpect(true).not.doPass("expectedValue");
         transcript.add("test is still running");
       }
     }, "Failure: Expected true not doPass expectedValue");
@@ -42,14 +42,14 @@ public class GreatExpectationsTest {
 
   @Test
   public void whenExpectationThrowsException2_shouldReportItWithNiceMessage() throws Exception {
-    testExpect(true).doThrow(new RuntimeException("fake exception"));
+    newExpect(true).doThrow(new RuntimeException("fake exception"));
   }
 
   @Test
   public void whenExpectationThrowsException_shouldReportItWithNiceMessage() throws Exception {
     expectException(new Runnable() {
       public void run() {
-        testExpect(true).doThrow(new RuntimeException("fake exception"));
+        newExpect(true).doThrow(new RuntimeException("fake exception"));
         transcript.add("test is still running");
       }
     }, "Error: fake exception\nExpected true doThrow false");
@@ -59,11 +59,11 @@ public class GreatExpectationsTest {
 
   @Test
   public void shouldInvokeMethodsFromSuperclassesCorrectly() throws Exception {
-    testExpect("abc").toFromSuper();
+    newExpect("abc").toFromSuper();
 
     expectFailure(new Runnable() {
       public void run() {
-        testExpect("abc").not.toFromSuper();
+        newExpect("abc").not.toFromSuper();
         transcript.add("test is still running");
       }
     }, "Failure: Expected abc not toFromSuper");
@@ -94,7 +94,7 @@ public class GreatExpectationsTest {
     assertEquals(expectedMessage, e.getMessage());
   }
 
-  private static <T, M extends TestExpectation<T, M>> TestExpectation<T, M> testExpect(T actual) {
+  private static <T, M extends TestExpectation<T, M>> TestExpectation<T, M> newExpect(T actual) {
     return wrapped(TestExpectation.class, actual);
   }
 
@@ -113,8 +113,8 @@ public class GreatExpectationsTest {
       return false;
     }
 
-    public boolean doThrow(RuntimeException e) {
-      throw e;
+    public boolean doThrow(Exception e) {
+      throw new RuntimeException(e);
     }
   }
 }
