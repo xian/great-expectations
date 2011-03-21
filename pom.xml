@@ -59,38 +59,19 @@
           </excludes>
         </configuration>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
   <scm>
-    <url>git@github.com:xian/robolectric.git</url>
-    <connection>scm:git:git://github.com/xian/robolectric.git</connection>
-    <developerConnection>scm:git:git@github.com:xian/robolectric.git
+    <url>git@github.com:xian/great-expectations.git</url>
+    <connection>scm:git:git://github.com/xian/great-expectations.git</connection>
+    <developerConnection>scm:git:git@github.com:xian/great-expectations.git
     </developerConnection>
   </scm>
 
   <ciManagement>
     <system>Hudson</system>
-    <url>http://cibuilder.pivotallabs.com:8080/job/robolectric/</url>
+    <url>http://cibuilder.pivotallabs.com:8080/job/great-expectations/</url>
   </ciManagement>
 
   <developers>
