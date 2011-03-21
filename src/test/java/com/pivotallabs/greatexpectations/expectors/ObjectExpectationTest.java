@@ -14,6 +14,20 @@ public class ObjectExpectationTest {
   }
 
   @Test
+  public void toBe_shouldReturnTrueIffObjectsAreIdentical() throws Exception {
+    objectExpectation.actual = "abc";
+    assertEquals(true, objectExpectation.toBe(objectExpectation.actual));
+    assertEquals(false, objectExpectation.toBe("def"));
+    assertEquals(false, objectExpectation.toBe(new String("abc")));
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void toBe_whenActualIsNull_shouldThrowNullPointerException() throws Exception {
+    objectExpectation.actual = null;
+    objectExpectation.toEqual("anything");
+  }
+
+  @Test
   public void toEqual_shouldReturnTrueIffObjectsAreEqual() throws Exception {
     objectExpectation.actual = "abc";
     assertEquals(true, objectExpectation.toEqual("abc"));
