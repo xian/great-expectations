@@ -50,7 +50,11 @@ public class ExpectGenerator {
     return buf.toString();
   }
 
-  private void generate(List<Class<? extends BaseMatcher>> classes) {
+  public void generate() {
+    generate(baseClasses());
+  }
+
+  public void generate(List<Class<? extends BaseMatcher>> classes) {
     out.println("package " + packageName + ";");
     out.println();
     out.println("import " + defaultPackage + ".*;");
@@ -69,20 +73,22 @@ public class ExpectGenerator {
   }
 
   public static void main(String[] args) throws IOException {
-    List<Class<? extends BaseMatcher>> classes = Arrays.asList(
-        BooleanMatcher.class,
-        ComparableMatcher.class,
-        DateMatcher.class,
-        IterableMatcher.class,
-        ObjectMatcher.class,
-        StringMatcher.class
-    );
-
     ExpectGenerator expectGenerator = new ExpectGenerator(args[0]);
     if (args.length == 3 && args[1].equals("--outFile")) {
       expectGenerator.setOut(new PrintStream(new File(args[2])));
     }
-    expectGenerator.generate(classes);
+    expectGenerator.generate();
+  }
+
+  public List<Class<? extends BaseMatcher>> baseClasses() {
+    return Arrays.asList(
+        ObjectMatcher.class,
+        BooleanMatcher.class,
+        ComparableMatcher.class,
+        DateMatcher.class,
+        IterableMatcher.class,
+        StringMatcher.class
+    );
   }
 
   private String className(Class<?> expectationClass) {
