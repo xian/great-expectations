@@ -11,8 +11,4 @@ public class BooleanMatcher<T extends Boolean, M extends BooleanMatcher<T, M>> e
   public boolean toBeFalse() {
     return actual.equals(false);
   }
-
-  @Override public boolean toEqual(T expected) {
-    return super.toEqual(expected);
-  }
 }
