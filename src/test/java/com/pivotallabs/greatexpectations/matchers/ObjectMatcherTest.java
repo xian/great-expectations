@@ -1,5 +1,6 @@
 package com.pivotallabs.greatexpectations.matchers;
 
+import com.pivotallabs.greatexpectations.GreatExpectations;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -56,7 +57,7 @@ public class ObjectMatcherTest {
 
   private ObjectMatcher<Object, ?> newExpect(Object value) {
     ObjectMatcher<Object, ?> objectMatcher = new ObjectMatcher();
-    objectMatcher.actual = value;
+    GreatExpectations.setActual(objectMatcher, value);
     return objectMatcher;
   }
 

@@ -1,5 +1,6 @@
 package com.pivotallabs.greatexpectations.matchers;
 
+import com.pivotallabs.greatexpectations.GreatExpectations;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -36,7 +37,7 @@ public class IterableMatcherTest {
 
   private <T extends Iterable<X>, X> IterableMatcher<T, X, ?> newExpect(T value) {
     IterableMatcher<T, X, ?> iterableMatcher = new IterableMatcher();
-    iterableMatcher.actual = value;
+    GreatExpectations.setActual(iterableMatcher, value);
     return iterableMatcher;
   }
 

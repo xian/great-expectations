@@ -7,7 +7,7 @@ import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
 import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
 import com.pivotallabs.greatexpectations.matchers.StringMatcher;
 
-import static com.pivotallabs.greatexpectations.matchers.GreatExpectations.wrapped;
+import static com.pivotallabs.greatexpectations.GreatExpectations.wrapped;
 
 public class Expect {
     public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, M> expect(T actual) {

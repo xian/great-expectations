@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.matchers;
+package com.pivotallabs.greatexpectations;
 
 public class BaseMatcher<T, M extends BaseMatcher<T, M>> {
   public M not;

@@ -1,5 +1,6 @@
 package com.pivotallabs.greatexpectations.matchers;
 
+import com.pivotallabs.greatexpectations.BaseMatcher;
 import com.pivotallabs.greatexpectations.MatcherOf;
 
 @MatcherOf(Object.class)

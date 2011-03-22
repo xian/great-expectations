@@ -1,10 +1,8 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.matchers.BaseMatcher;
 import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
 import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
 import com.pivotallabs.greatexpectations.matchers.DateMatcher;
-import com.pivotallabs.greatexpectations.matchers.GreatExpectations;
 import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
 import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
 import com.pivotallabs.greatexpectations.matchers.StringMatcher;
@@ -13,15 +11,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ExpectGenerator {
-  private String defaultPackage;
+  private Set<String> importedPackages = new HashSet<String>();
   private String packageName;
   private PrintStream out;
 
   public ExpectGenerator(String packageName) {
-    defaultPackage = BaseMatcher.class.getPackage().getName();
+    importedPackages.add("java.lang");
+    importedPackages.add(packageName);
+    importedPackages.add(BaseMatcher.class.getPackage().getName());
+    importedPackages.add(ObjectMatcher.class.getPackage().getName());
+    importedPackages.add(packageName);
+
     this.packageName = packageName;
     out = System.out;
   }
@@ -57,7 +62,8 @@ public class ExpectGenerator {
   public void generate(List<Class<? extends BaseMatcher>> classes) {
     out.println("package " + packageName + ";");
     out.println();
-    out.println("import " + defaultPackage + ".*;");
+    out.println("import " + BaseMatcher.class.getPackage().getName() + ".*;");
+    out.println("import " + ObjectMatcher.class.getPackage().getName() + ".*;");
     out.println("import static " + GreatExpectations.class.getName() + ".wrapped;");
     out.println();
 
@@ -94,7 +100,7 @@ public class ExpectGenerator {
   private String className(Class<?> matcherClass) {
     String name;
     String packageName = matcherClass.getPackage().getName();
-    if (packageName.equals("java.lang") || packageName.equals(defaultPackage)) {
+    if (importedPackages.contains(packageName)) {
       name = matcherClass.getSimpleName();
     } else {
       name = matcherClass.getName();

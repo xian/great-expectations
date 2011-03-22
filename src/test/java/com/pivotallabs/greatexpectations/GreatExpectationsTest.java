@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.matchers;
+package com.pivotallabs.greatexpectations;
 
 import com.pivotallabs.greatexpectations.util.Transcript;
 import org.junit.Before;
@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.pivotallabs.greatexpectations.matchers.GreatExpectations.wrapped;
+import static com.pivotallabs.greatexpectations.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

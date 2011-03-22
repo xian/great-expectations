@@ -1,4 +1,4 @@
-package com.pivotallabs.greatexpectations.matchers;
+package com.pivotallabs.greatexpectations;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -14,7 +14,6 @@ import java.util.Arrays;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
 import static org.objectweb.asm.Opcodes.V1_5;
 
@@ -73,11 +72,11 @@ public class GreatExpectations {
     Class<M> wrappedMatcherClass = loadMatcher(matcherClass);
     try {
       M matcher = wrappedMatcherClass.newInstance();
-      matcher.actual = actual;
+      setActual(matcher, actual);
 
       matcher.not = wrappedMatcherClass.newInstance();
       matcher.not.inverted = true;
-      matcher.not.actual = actual;
+      setActual(matcher.not, actual);
 
       return matcher;
     } catch (InstantiationException e) {
@@ -85,6 +84,11 @@ public class GreatExpectations {
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static void setActual(BaseMatcher matcher, Object actual) {
+    if (matcher.actual != null) throw new IllegalStateException("actual is already set");
+    matcher.actual = actual;
   }
 
   private static <M extends BaseMatcher> Class<M> loadMatcher(Class<M> matcherClass) {
@@ -131,8 +135,6 @@ public class GreatExpectations {
           GeneratorAdapter generatorAdapter = new GeneratorAdapter(mv,
               ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method));
 
-          generatorAdapter.visitCode();
-
           generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
               new org.objectweb.asm.commons.Method("resetTrace", Type.VOID_TYPE, new Type[0]));
 
@@ -147,8 +149,12 @@ public class GreatExpectations {
 
           generatorAdapter.loadArgArray(); // wrap arg 3
 
-          generatorAdapter.visitMethodInsn(INVOKESTATIC, Type.getInternalName(GreatExpectations.class),
-              "wrap", "(Lcom/pivotallabs/greatexpectations/matchers/BaseMatcher;Ljava/lang/String;Z[Ljava/lang/Object;)Z");
+          generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
+              new org.objectweb.asm.commons.Method("wrap", Type.BOOLEAN_TYPE,
+                  new Type[]{
+                      Type.getType(BaseMatcher.class), Type.getType(String.class), Type.BOOLEAN_TYPE, Type.getType(new Object[0].getClass())
+                  }));
+
           generatorAdapter.returnValue();
           generatorAdapter.endMethod();
         }
