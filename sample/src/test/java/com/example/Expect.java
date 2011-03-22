@@ -10,6 +10,9 @@ import com.pivotallabs.greatexpectations.matchers.StringMatcher;
 import static com.pivotallabs.greatexpectations.GreatExpectations.wrapped;
 
 public class Expect {
+    public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, M> expect(T actual) {
+        return wrapped(ObjectMatcher.class, actual);
+    }
     public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, M> expect(T actual) {
         return wrapped(BooleanMatcher.class, actual);
     }
@@ -21,9 +24,6 @@ public class Expect {
     }
     public static <T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> IterableMatcher<T, X, M> expect(T actual) {
         return wrapped(IterableMatcher.class, actual);
-    }
-    public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, M> expect(T actual) {
-        return wrapped(ObjectMatcher.class, actual);
     }
     public static <T extends String, M extends StringMatcher<T, M>> StringMatcher<T, M> expect(T actual) {
         return wrapped(StringMatcher.class, actual);
