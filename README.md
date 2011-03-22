@@ -9,31 +9,31 @@ great-expectations makes it dead-simple to use existing matchers using autocompl
 
 Here's a JUnit assertion:
 
-  import static org.junit.Assert.assertThat;
-  import static org.junit.matchers.JUnitMatchers.containsString;
+    import static org.junit.Assert.assertThat;
+    import static org.junit.matchers.JUnitMatchers.containsString;
 
-  @Test public void testString() {
-    assertThat("Hello", containsString("Hell"));
-  }
+    @Test public void testString() {
+      assertThat("Hello", containsString("Hell"));
+    }
 
 Here's the equivalent great-expectations assertion:
 
-  import static com.example.Expect.expect;
+    import static com.example.Expect.expect;
 
-  @Test public void testString() {
-    expect("Hello").toContain("Hell");
-  }
+    @Test public void testString() {
+      expect("Hello").toContain("Hell");
+    }
 
 Not a huge difference, but note that there's just a single import.
 
 Here's how the matcher looks:
 
-@MatcherOf(String.class)
-public class StringMatcher<T extends String, M extends StringMatcher<T, M>> extends ObjectMatcher<T, M> {
-  public boolean toContain(String expected) {
-    return actual.indexOf(expected) != -1;
-  }
-}
+    @MatcherOf(String.class)
+    public class StringMatcher<T extends String, M extends StringMatcher<T, M>> extends ObjectMatcher<T, M> {
+      public boolean toContain(String expected) {
+        return actual.indexOf(expected) != -1;
+      }
+    }
 
 ***Generating Expect.java***
 Sorry, we have to generate some java code. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers there.
