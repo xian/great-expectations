@@ -62,7 +62,6 @@ public class ExpectGenerator {
   public void generate(List<Class<? extends BaseMatcher>> classes) {
     out.println("package " + packageName + ";");
     out.println();
-    out.println("import " + BaseMatcher.class.getPackage().getName() + ".*;");
     out.println("import " + ObjectMatcher.class.getPackage().getName() + ".*;");
     out.println("import static " + GreatExpectations.class.getName() + ".wrapped;");
     out.println();
