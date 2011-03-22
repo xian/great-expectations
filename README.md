@@ -36,4 +36,5 @@ Here's how the matcher looks:
     }
 
 ***Generating Expect.java***
+
 Sorry, we have to generate some java code. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers there.
