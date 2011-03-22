@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ALOAD;
@@ -32,18 +33,21 @@ public class GreatExpectations {
     if (result == baseMatcher.inverted) {
       StringBuilder message = new StringBuilder();
       message
-          .append("Failure: Expected ")
+          .append("Failure: Expected <")
           .append(baseMatcher.actual)
-          .append(baseMatcher.inverted ? " not " : " ")
-          .append(methodName);
+          .append(baseMatcher.inverted ? "> not " : "> ")
+          .append(methodName.replaceAll("([A-Z])", " $1").toLowerCase());
 
-      if (expectArgs != null) {
-        for (int i = 0; i < expectArgs.length; i++) {
-          Object expectArg = expectArgs[i];
-          message.append(i == 0 ? " " : ", ");
-          message.append(expectArg);
+      for (int i = 0; i < expectArgs.length; i++) {
+        Object expectArg = expectArgs[i];
+        message.append(i == 0 ? " <" : ">, <");
+
+        if (expectArg instanceof Object[]) {
+          expectArg = Arrays.asList((Object[]) expectArg);
         }
+        message.append(expectArg);
       }
+      if (expectArgs.length > 0) message.append(">");
       throw new AssertionError(message.toString());
     }
     return true;

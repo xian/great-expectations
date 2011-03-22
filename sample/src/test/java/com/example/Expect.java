@@ -2,6 +2,7 @@ package com.example;
 
 import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
 import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
+import com.pivotallabs.greatexpectations.matchers.DateMatcher;
 import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
 import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
 import com.pivotallabs.greatexpectations.matchers.StringMatcher;

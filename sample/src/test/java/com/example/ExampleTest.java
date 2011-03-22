@@ -35,4 +35,9 @@ public class ExampleTest {
   public void stringCompareFail() throws Exception {
     expect("this string").toContain("that string");
   }
+
+  @Test
+  public void iterable() throws Exception {
+    expect(Arrays.asList("a", "b", "c")).toContain("d");
+  }
 }

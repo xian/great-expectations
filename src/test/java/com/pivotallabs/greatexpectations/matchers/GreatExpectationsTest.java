@@ -5,10 +5,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static com.pivotallabs.greatexpectations.matchers.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public class GreatExpectationsTest {
   private Transcript transcript;
@@ -23,11 +26,9 @@ public class GreatExpectationsTest {
     expectFailure(new Runnable() {
       public void run() {
         newExpect(true).doFail("expectedValue");
-        transcript.add("test is still running");
       }
-    }, "Failure: Expected true doFail expectedValue");
-
-    transcript.assertNothingSoFar();
+    }, "Failure: Expected <true> do fail <expectedValue>");
+    assertNull(GreatExpectations.lastExpectTrace);
   }
 
   @Test
@@ -35,11 +36,9 @@ public class GreatExpectationsTest {
     expectFailure(new Runnable() {
       public void run() {
         newExpect(true).not.doPass("expectedValue");
-        transcript.add("test is still running");
       }
-    }, "Failure: Expected true not doPass expectedValue");
-
-    transcript.assertNothingSoFar();
+    }, "Failure: Expected <true> not do pass <expectedValue>");
+    assertNull(GreatExpectations.lastExpectTrace);
   }
 
   @Test
@@ -47,12 +46,8 @@ public class GreatExpectationsTest {
     expectException(new Runnable() {
       public void run() {
         newExpect(true).doThrow(new RuntimeException("fake exception"));
-        transcript.add("test is still running");
       }
     }, "java.lang.RuntimeException: fake exception");
-
-    transcript.assertNothingSoFar();
-
     assertNull(GreatExpectations.lastExpectTrace);
   }
 
@@ -68,10 +63,17 @@ public class GreatExpectationsTest {
     expectFailure(new Runnable() {
       public void run() {
         newExpect("abc").not.toFromSuper();
-        transcript.add("test is still running");
       }
-    }, "Failure: Expected abc not toFromSuper");
-    transcript.assertNothingSoFar();
+    }, "Failure: Expected <abc> not to from super");
+  }
+
+  @Test
+  public void shouldGenerateNiceErrorMessages() throws Exception {
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newExpect(Arrays.asList("a", "b", "c")).doFailWithArgs("d", "e");
+      }
+    }, "Failure: Expected <[a, b, c]> do fail with args <[d, e]>");
   }
 
   ////////////////
@@ -80,6 +82,7 @@ public class GreatExpectationsTest {
     AssertionError e = null;
     try {
       runnable.run();
+      fail("shouldn't have gotten here!");
     } catch (AssertionError e1) {
       e = e1;
     }
@@ -119,6 +122,10 @@ public class GreatExpectationsTest {
 
     public boolean doThrow(Exception e) {
       throw new RuntimeException(e);
+    }
+
+    public boolean doFailWithArgs(String... strings) {
+      return false;
     }
   }
 }
