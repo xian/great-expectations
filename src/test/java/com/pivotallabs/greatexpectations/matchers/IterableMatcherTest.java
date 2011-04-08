@@ -27,6 +27,22 @@ public class IterableMatcherTest {
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "a"));
   }
 
+  @Test public void toContainExactly() throws Exception {
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("a"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("d"));
+
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("a", "b"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("a", "b", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("b", "c", "a"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("a", "b", "c", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactly("a", "c"));
+
+    assertTrue(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "b", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "c"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "b", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "c", "b"));
+  }
+
   @Test
   public void toBeEmpty() throws Exception {
     assertTrue(newExpect(Arrays.asList()).toBeEmpty());

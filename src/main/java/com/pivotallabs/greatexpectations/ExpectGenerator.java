@@ -86,7 +86,7 @@ public class ExpectGenerator {
   }
 
   public List<Class<? extends BaseMatcher>> baseClasses() {
-    return Arrays.asList(
+    return Arrays.<Class<? extends BaseMatcher>>asList(
         ObjectMatcher.class,
         BooleanMatcher.class,
         ComparableMatcher.class,
