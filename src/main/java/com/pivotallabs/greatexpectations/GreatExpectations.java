@@ -5,9 +5,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -161,13 +158,6 @@ public class GreatExpectations {
 
         cw.visitEnd();
         byte[] b = cw.toByteArray();
-
-        try {
-          new DataOutputStream(new FileOutputStream("/tmp/" + className + "ASM.class")).write(b);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-
         return defineClass(className, b, 0, b.length);
       } else {
         return super.findClass(className);
