@@ -56,5 +56,4 @@ public class IterableMatcherTest {
     GreatExpectations.setActual(iterableMatcher, value);
     return iterableMatcher;
   }
-
 }
