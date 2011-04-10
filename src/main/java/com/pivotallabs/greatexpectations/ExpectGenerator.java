@@ -39,6 +39,7 @@ public class ExpectGenerator {
     for (Class targetClass : annotation.value()) {
       String type = className(targetClass);
       String genericSig = annotation.directObject() ? "<T, X, M>" : "<T, M>";
+      String returnType = annotation.directObject() ? "<T, X, " : "<T, ";
       buf.append("    public static <T extends ")
           .append(type)
           .append(annotation.directObject() ? "<X>, X" : "")
@@ -47,8 +48,11 @@ public class ExpectGenerator {
           .append(genericSig)
           .append("> ")
           .append(name)
+          .append(returnType)
+          .append("? extends ")
+          .append(name)
           .append(genericSig)
-          .append(" expect(T actual) {\n" + "        return wrapped(")
+          .append("> expect(T actual) {\n" + "        return wrapped(")
           .append(name)
           .append(".class, actual);\n" + "    }");
     }

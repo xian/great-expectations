@@ -3,8 +3,12 @@ package com.example;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.example.Expect.expect;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class ExampleTest {
   @Test
@@ -39,5 +43,17 @@ public class ExampleTest {
   @Test
   public void iterable() throws Exception {
     expect(Arrays.asList("a", "b", "c")).toContain("d");
+  }
+
+  @Test
+  public void shouldSuck() throws Exception {
+    assertThat("team", not(containsString("me")));
+  }
+
+  @Test
+  public void should() throws Exception {
+    List<String> strings = Arrays.asList("1");
+    expect(strings).toContain("1");
+    expect(strings).not.toContain("1");
   }
 }
