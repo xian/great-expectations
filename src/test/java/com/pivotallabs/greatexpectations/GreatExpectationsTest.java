@@ -76,6 +76,20 @@ public class GreatExpectationsTest {
     }, "Failure: Expected <[a, b, c]> do fail with args <[d, e]>");
   }
 
+  @Test
+  public void shouldNotAllowActualToBeNull() throws Exception {
+    expectException(new Runnable() {
+      @Override public void run() {
+        newExpect((Object) null).doPass("anything");
+      }
+    }, "actual should not be null");
+  }
+
+  @Test
+  public void whenAllowActualToBeNull_shouldAllowActualToBeNull() throws Exception {
+    newExpect((Object) null).doPermitNullActual();
+  }
+
   ////////////////
 
   private void expectFailure(Runnable runnable, String expectedMessage) {
@@ -126,6 +140,11 @@ public class GreatExpectationsTest {
 
     public boolean doFailWithArgs(String... strings) {
       return false;
+    }
+
+    @AllowActualToBeNull
+    public boolean doPermitNullActual() {
+      return true;
     }
   }
 }

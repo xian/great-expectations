@@ -25,7 +25,24 @@ public class GreatExpectations {
   }
 
   @SuppressWarnings({"UnusedDeclaration"})
-  public static boolean wrap(BaseMatcher baseMatcher, String methodName, boolean result, Object[] expectArgs) {
+  public static void beforeMatch(BaseMatcher baseMatcher, String methodName, boolean allowActualToBeNull) {
+    resetTrace();
+    if (baseMatcher.actual == null && !allowActualToBeNull) {
+      NullPointerException e = new NullPointerException("actual should not be null");
+      trim(e, 1);
+      throw e;
+    }
+  }
+
+  private static void trim(Throwable t, int count) {
+    StackTraceElement[] src = t.getStackTrace();
+    StackTraceElement[] dest = new StackTraceElement[src.length - count];
+    System.arraycopy(src, count, dest, 0, src.length - count);
+    t.setStackTrace(dest);
+  }
+
+  @SuppressWarnings({"UnusedDeclaration"})
+  public static boolean afterMatch(BaseMatcher baseMatcher, String methodName, boolean result, Object[] expectArgs) {
     if (result == baseMatcher.inverted) {
       StringBuilder message = new StringBuilder();
       message
@@ -84,7 +101,8 @@ public class GreatExpectations {
   }
 
   public static void setActual(BaseMatcher matcher, Object actual) {
-    if (matcher.actual != null) throw new IllegalStateException("actual is already set");
+    if (matcher.actual != null)
+      throw new IllegalStateException("actual is already set");
     matcher.actual = actual;
   }
 
@@ -132,22 +150,27 @@ public class GreatExpectations {
           GeneratorAdapter generatorAdapter = new GeneratorAdapter(mv,
               ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method));
 
-          generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
-              new org.objectweb.asm.commons.Method("resetTrace", Type.VOID_TYPE, new Type[0]));
+          generatorAdapter.loadThis(); // beforeMatch arg 0
+          generatorAdapter.push(method.getName()); // beforeMatch arg 1
+          generatorAdapter.push(method.getAnnotation(AllowActualToBeNull.class) != null); // beforeMatch arg 2
 
-          generatorAdapter.loadThis(); // wrap arg 0
-          generatorAdapter.push(method.getName()); // wrap arg 1
+          generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
+              new org.objectweb.asm.commons.Method("beforeMatch", Type.VOID_TYPE,
+                  new Type[]{Type.getType(BaseMatcher.class), Type.getType(String.class), Type.BOOLEAN_TYPE}));
+
+          generatorAdapter.loadThis(); // afterMatch arg 0
+          generatorAdapter.push(method.getName()); // afterMatch arg 1
 
           generatorAdapter.visitVarInsn(ALOAD, 0); // super this
           generatorAdapter.loadArgs(); // super args
           mv.visitMethodInsn(INVOKESPECIAL,
               classRef(method.getDeclaringClass()), method.getName(),
-              Type.getMethodDescriptor(method)); // invoke super, wrap arg 2
+              Type.getMethodDescriptor(method)); // invoke super, afterMatch arg 2
 
-          generatorAdapter.loadArgArray(); // wrap arg 3
+          generatorAdapter.loadArgArray(); // afterMatch arg 3
 
           generatorAdapter.invokeStatic(Type.getType(GreatExpectations.class),
-              new org.objectweb.asm.commons.Method("wrap", Type.BOOLEAN_TYPE,
+              new org.objectweb.asm.commons.Method("afterMatch", Type.BOOLEAN_TYPE,
                   new Type[]{
                       Type.getType(BaseMatcher.class), Type.getType(String.class), Type.BOOLEAN_TYPE, Type.getType(new Object[0].getClass())
                   }));

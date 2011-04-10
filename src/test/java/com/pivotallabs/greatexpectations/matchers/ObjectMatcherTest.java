@@ -3,6 +3,7 @@ package com.pivotallabs.greatexpectations.matchers;
 import com.pivotallabs.greatexpectations.GreatExpectations;
 import org.junit.Test;
 
+import static com.pivotallabs.greatexpectations.GreatExpectations.wrapped;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,9 +17,14 @@ public class ObjectMatcherTest {
     assertFalse(newExpect(abc).toBe(new String(abc)));
   }
 
-  @Test(expected = NullPointerException.class)
-  public void toBe_whenActualIsNull_shouldThrowNullPointerException() throws Exception {
+  @Test
+  public void toBe_shouldNotExplicitlyCheckForNull() throws Exception {
     newExpect(null).toBe("anything");
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void toBe_whenWrappedAndActualIsNull_shouldThrowNullPointerException() throws Exception {
+    wrapped(ObjectMatcher.class, null).toBe("anything");
   }
 
   @Test
@@ -51,6 +57,12 @@ public class ObjectMatcherTest {
   public void toBeNull() throws Exception {
     assertFalse(newExpect("abc").toBeNull());
     assertTrue(newExpect(null).toBeNull());
+  }
+
+  @Test
+  public void wrapped_toBeNull() throws Exception {
+    ((ObjectMatcher) wrapped(ObjectMatcher.class, "abc").not).toBeNull();
+    wrapped(ObjectMatcher.class, null).toBeNull();
   }
 
   ///////////////////

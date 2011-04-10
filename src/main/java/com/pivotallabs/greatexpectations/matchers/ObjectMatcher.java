@@ -1,5 +1,6 @@
 package com.pivotallabs.greatexpectations.matchers;
 
+import com.pivotallabs.greatexpectations.AllowActualToBeNull;
 import com.pivotallabs.greatexpectations.BaseMatcher;
 import com.pivotallabs.greatexpectations.MatcherOf;
 
@@ -10,7 +11,6 @@ public class ObjectMatcher<T, M extends ObjectMatcher<T, M>> extends BaseMatcher
   }
 
   public boolean toBe(T expected) {
-    if (actual == null) throw new NullPointerException("actual is null");
     return actual == expected;
   }
 
@@ -18,6 +18,7 @@ public class ObjectMatcher<T, M extends ObjectMatcher<T, M>> extends BaseMatcher
     return expected.isAssignableFrom(actual.getClass());
   }
 
+  @AllowActualToBeNull
   public boolean toBeNull() {
     return actual == null;
   }
