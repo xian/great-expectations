@@ -51,11 +51,11 @@ Releases
 
 great-expectations is available through maven:
 
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.github.xian&lt;/groupId&gt;
-      &lt;artifactId&gt;great-expectations&lt;/artifactId&gt;
-      &lt;version&gt;0.8&lt;/version&gt;
-    &lt;/dependency&gt;
+    <dependency>
+      <groupId>com.github.xian</groupId>
+      <artifactId>great-expectations</artifactId>
+      <version>0.8</version>
+    </dependency>
 
 or download directly:
 
