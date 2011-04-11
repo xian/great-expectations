@@ -10,6 +10,7 @@ import com.pivotallabs.greatexpectations.matchers.StringMatcher;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -60,7 +61,7 @@ public class ExpectGenerator {
   }
 
   public void generate() {
-    generate(baseClasses());
+    generate(matcherClasses());
   }
 
   public void generate(List<Class<? extends BaseMatcher>> classes) {
@@ -89,14 +90,16 @@ public class ExpectGenerator {
     expectGenerator.generate();
   }
 
-  public List<Class<? extends BaseMatcher>> baseClasses() {
-    return Arrays.<Class<? extends BaseMatcher>>asList(
-        ObjectMatcher.class,
-        BooleanMatcher.class,
-        ComparableMatcher.class,
-        DateMatcher.class,
-        IterableMatcher.class,
-        StringMatcher.class
+  public List<Class<? extends BaseMatcher>> matcherClasses() {
+    return new ArrayList<Class<? extends BaseMatcher>>(
+        Arrays.<Class<? extends BaseMatcher>>asList(
+            ObjectMatcher.class,
+            BooleanMatcher.class,
+            ComparableMatcher.class,
+            DateMatcher.class,
+            IterableMatcher.class,
+            StringMatcher.class
+        )
     );
   }
 

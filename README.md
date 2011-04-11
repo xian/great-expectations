@@ -44,4 +44,19 @@ Create a class with a generic signature from hell. Then just create a method whi
 
 *** Generating Expect.java ***
 
-Oh yeah, sorry, we have to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers there.
+Oh yeah, sorry, we have to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers by extending ExpectGenerator.matcherClasses() and adding to the list.
+
+Releases
+========
+
+great-expectations is available through maven:
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.github.xian&lt;/groupId&gt;
+      &lt;artifactId&gt;great-expectations&lt;/artifactId&gt;
+      &lt;version&gt;0.8&lt;/version&gt;
+    &lt;/dependency&gt;
+
+or download directly:
+
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.8/great-expectations-0.8.jar

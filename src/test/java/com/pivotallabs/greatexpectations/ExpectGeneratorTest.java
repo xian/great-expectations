@@ -48,4 +48,9 @@ public class ExpectGeneratorTest {
         "    }",
         expectGenerator.generateFor(IterableMatcher.class));
   }
+
+  @Test
+  public void matcherClasses_shouldReturnAMutableList() throws Exception {
+    expectGenerator.matcherClasses().add(GreatExpectationsTest.TestMatcher.class);
+  }
 }
