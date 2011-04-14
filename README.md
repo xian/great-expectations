@@ -3,14 +3,18 @@ great-expectations
 
 ## Jasmine-style expectations for Java
 
+    expect("abc").toMatch("b");
+    expect(getLoggedInUser()).toBeNull();
+    expect(listOfMeats).not.toContain("mortadella");
+
 JUnit 4's assertThat() is kinda awesome and kinda sucks. It's awesome cuz it encourages you to write your own matchers. It sucks cuz it makes it really painful to write your own matchers. And it makes it really hard to find existing matcehrs.
 
 great-expectations makes it dead-simple to find existing relevant matchers using autocomplete in your favorite IDE, and it makes it very easy to declare your own type-safe matchers.
 
-Getting Started
-===============
+Quick Start
+===========
 
-Download [http://mvnrepository.com/artifact/com.github.xian/great-expectations](great-expectations). If you're not using Maven or something like it for dependency management, don't forget to grab asm and asm-commons too, and put them all in your test classpath. (And think about using Maven.)
+Download [great-expectations](http://mvnrepository.com/artifact/com.github.xian/great-expectations). If you're not using Maven or something like it for dependency management, don't forget to grab asm and asm-commons too, and put them all in your test classpath. (And think about using Maven.)
 
 Create a class named Expect in your project, with the following contents:
 
@@ -84,7 +88,7 @@ Create a class with a generic signature from hell. Then just create a method whi
 
 Oh yeah, sorry, we have to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers by extending ExpectGenerator.matcherClasses() and adding to the list.
 
-Releases
+Download
 ========
 
 great-expectations is available through maven:
@@ -92,9 +96,20 @@ great-expectations is available through maven:
     <dependency>
       <groupId>com.github.xian</groupId>
       <artifactId>great-expectations</artifactId>
-      <version>0.8</version>
+      <version>0.9</version>
     </dependency>
 
 or download directly:
 
-    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.8/great-expectations-0.8.jar
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.9/great-expectations-0.9.jar
+
+Releases
+========
+
+### 0.9
+* Added String toMatch(), which matches against regular expressions.
+* Iterable's toContain() now doesn't care about order. Added toContainInOrder().
+* Fixes compilation errors and warnings.
+
+### 0.8
+* Initial packaged release.
