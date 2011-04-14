@@ -2,10 +2,16 @@ package com.pivotallabs.greatexpectations.matchers;
 
 import com.pivotallabs.greatexpectations.MatcherOf;
 
+import java.util.regex.Pattern;
+
 @MatcherOf(String.class)
 public class StringMatcher<T extends String, M extends StringMatcher<T, M>> extends ObjectMatcher<T, M> {
   public boolean toContain(String expected) {
     return actual.indexOf(expected) != -1;
+  }
+
+  public boolean toMatch(String expectedPattern) {
+    return Pattern.compile(expectedPattern).matcher(actual).find();
   }
 
 //  public boolean toEqual(String expected) {
@@ -15,12 +21,4 @@ public class StringMatcher<T extends String, M extends StringMatcher<T, M>> exte
 //    }
 //    return actual.equals(expected);
 //  }
-
-  public boolean toBeTrue() {
-    return false;
-  }
-
-  public boolean toBeFalse(int a, String b, boolean c) {
-    return false;
-  }
 }
