@@ -10,21 +10,27 @@ import static org.junit.Assert.assertTrue;
 
 public class IterableMatcherTest {
   @Test
-  public void toContain() throws Exception {
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("a"));
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("b"));
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("c"));
-    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("d"));
+  public void testContain() throws Exception {
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("b", "a", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("b", "a", "c", "d"));
+  }
+  
+  @Test
+  public void toContainInOrder() throws Exception {
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("b"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("c"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("d"));
 
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "b"));
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "b", "c"));
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "c"));
-    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContain("b", "c"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "b"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "b", "c"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "c"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("b", "c"));
 
-    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("c", "b"));
-    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("c", "a"));
-    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "c", "b"));
-    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContain("a", "a"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("c", "b"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("c", "a"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "c", "b"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "a"));
   }
 
   @Test public void toContainExactly() throws Exception {
