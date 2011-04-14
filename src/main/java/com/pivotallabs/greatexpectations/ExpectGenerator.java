@@ -1,20 +1,11 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
-import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
-import com.pivotallabs.greatexpectations.matchers.DateMatcher;
-import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
-import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
-import com.pivotallabs.greatexpectations.matchers.StringMatcher;
+import com.pivotallabs.greatexpectations.matchers.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ExpectGenerator {
   private Set<String> importedPackages = new HashSet<String>();
@@ -50,10 +41,7 @@ public class ExpectGenerator {
           .append("> ")
           .append(name)
           .append(returnType)
-          .append("? extends ")
-          .append(name)
-          .append(genericSig)
-          .append("> expect(T actual) {\n" + "        return wrapped(")
+          .append("?> expect(T actual) {\n" + "        return wrapped(")
           .append(name)
           .append(".class, actual);\n" + "    }");
     }

@@ -19,7 +19,7 @@ public class ExpectGeneratorTest {
 
   @Test
   public void forObject_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, ? extends ObjectMatcher<T, M>> expect(T actual) {\n" +
+    assertEquals("    public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, ?> expect(T actual) {\n" +
         "        return wrapped(ObjectMatcher.class, actual);\n" +
         "    }",
         expectGenerator.generateFor(ObjectMatcher.class));
@@ -27,7 +27,7 @@ public class ExpectGeneratorTest {
 
   @Test
   public void forSubclass_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, ? extends BooleanMatcher<T, M>> expect(T actual) {\n" +
+    assertEquals("    public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, ?> expect(T actual) {\n" +
         "        return wrapped(BooleanMatcher.class, actual);\n" +
         "    }",
         expectGenerator.generateFor(BooleanMatcher.class));
@@ -35,7 +35,7 @@ public class ExpectGeneratorTest {
 
   @Test
   public void forGeneric_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Comparable, M extends ComparableMatcher<T, M>> ComparableMatcher<T, ? extends ComparableMatcher<T, M>> expect(T actual) {\n" +
+    assertEquals("    public static <T extends Comparable, M extends ComparableMatcher<T, M>> ComparableMatcher<T, ?> expect(T actual) {\n" +
         "        return wrapped(ComparableMatcher.class, actual);\n" +
         "    }",
         expectGenerator.generateFor(ComparableMatcher.class));
@@ -43,7 +43,7 @@ public class ExpectGeneratorTest {
 
   @Test
   public void forGeneric_shouldGenerateDirectObjectGeneric() throws Exception {
-    assertEquals("    public static <T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> IterableMatcher<T, X, ? extends IterableMatcher<T, X, M>> expect(T actual) {\n" +
+    assertEquals("    public static <T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> IterableMatcher<T, X, ?> expect(T actual) {\n" +
         "        return wrapped(IterableMatcher.class, actual);\n" +
         "    }",
         expectGenerator.generateFor(IterableMatcher.class));
