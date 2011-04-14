@@ -29,6 +29,12 @@ public class ExpectGenerator {
 
     StringBuilder buf = new StringBuilder();
     for (Class targetClass : annotation.value()) {
+      if (targetClass.equals(Boolean.class)) {
+        buf.append("    public static BooleanMatcher<Boolean, ?> expect(boolean actual) {\n" +
+                   "        return wrapped(BooleanMatcher.class, actual);\n" +
+                   "    }\n");
+      }
+
       String type = className(targetClass);
       String genericSig = annotation.directObject() ? "<T, X, M>" : "<T, M>";
       String returnType = annotation.directObject() ? "<T, X, " : "<T, ";

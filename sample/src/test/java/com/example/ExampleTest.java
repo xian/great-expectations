@@ -21,6 +21,7 @@ public class ExampleTest {
   public void boolFail() throws Exception {
     expect(Boolean.TRUE).toBeTrue();
     expect(Boolean.TRUE).toBeFalse();
+    expect(true).toEqual(false);
   }
 
   @Test

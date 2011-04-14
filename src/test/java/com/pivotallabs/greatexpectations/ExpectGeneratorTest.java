@@ -1,9 +1,6 @@
 package com.pivotallabs.greatexpectations;
 
-import com.pivotallabs.greatexpectations.matchers.BooleanMatcher;
-import com.pivotallabs.greatexpectations.matchers.ComparableMatcher;
-import com.pivotallabs.greatexpectations.matchers.IterableMatcher;
-import com.pivotallabs.greatexpectations.matchers.ObjectMatcher;
+import com.pivotallabs.greatexpectations.matchers.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,11 +23,23 @@ public class ExpectGeneratorTest {
   }
 
   @Test
-  public void forSubclass_shouldGenerateExpectLines() throws Exception {
-    assertEquals("    public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, ?> expect(T actual) {\n" +
+  public void forBoolean_shouldGeneratePrimitiveBooleanToWorkAroundJavaBug() throws Exception {
+    // cannot find symbol method valueOf(boolean) for expect(true)
+    assertEquals("    public static BooleanMatcher<Boolean, ?> expect(boolean actual) {\n" +
+        "        return wrapped(BooleanMatcher.class, actual);\n" +
+        "    }\n" +
+        "    public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, ?> expect(T actual) {\n" +
         "        return wrapped(BooleanMatcher.class, actual);\n" +
         "    }",
         expectGenerator.generateFor(BooleanMatcher.class));
+  }
+
+  @Test
+  public void forSubclass_shouldGenerateExpectLines() throws Exception {
+    assertEquals("    public static <T extends String, M extends StringMatcher<T, M>> StringMatcher<T, ?> expect(T actual) {\n" +
+        "        return wrapped(StringMatcher.class, actual);\n" +
+        "    }",
+        expectGenerator.generateFor(StringMatcher.class));
   }
 
   @Test

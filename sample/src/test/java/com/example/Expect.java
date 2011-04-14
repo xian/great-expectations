@@ -8,6 +8,9 @@ public class Expect {
     public static <T extends Object, M extends ObjectMatcher<T, M>> ObjectMatcher<T, ?> expect(T actual) {
         return wrapped(ObjectMatcher.class, actual);
     }
+    public static BooleanMatcher<Boolean, ?> expect(boolean actual) {
+        return wrapped(BooleanMatcher.class, actual);
+    }
     public static <T extends Boolean, M extends BooleanMatcher<T, M>> BooleanMatcher<T, ?> expect(T actual) {
         return wrapped(BooleanMatcher.class, actual);
     }
