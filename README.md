@@ -14,11 +14,10 @@ great-expectations makes it dead-simple to find existing relevant matchers using
 Quick Start
 ===========
 
-Download [great-expectations](http://mvnrepository.com/artifact/com.github.xian/great-expectations). If you're not using Maven or something like it for dependency management, don't forget to grab asm and asm-commons too, and put them all in your test classpath. (And think about using Maven.)
+1. Download [great-expectations](http://mvnrepository.com/artifact/com.github.xian/great-expectations). If you're not using Maven or something like it for dependency management, don't forget to grab asm and asm-commons too, and put them all in your test classpath. (And think about using Maven.)
+1. Create a class named Expect in your project, containing the contents of [this file](https://github.com/xian/great-expectations/raw/master/sample/src/test/java/com/example/Expect.java) (fix the package name to match where you place it).
+1. Now write your first expectation in a test:
 
-Create a class named Expect in your project, containing the contents of [this file](https://github.com/xian/great-expectations/raw/master/sample/src/test/java/com/example/Expect.java) (fix the package name to match where you place it).
-
-Now write your first expectation in a test:
     expect(true).toBeFalse();
 
 ## Writing asserts:
