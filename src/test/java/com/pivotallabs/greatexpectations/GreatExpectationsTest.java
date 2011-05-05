@@ -68,12 +68,45 @@ public class GreatExpectationsTest {
   }
 
   @Test
-  public void shouldGenerateNiceErrorMessages() throws Exception {
+  public void shouldGenerateNiceDefaultErrorMessages() throws Exception {
     expectFailure(new Runnable() {
       @Override public void run() {
         newExpect(Arrays.asList("a", "b", "c")).doFailWithArgs("d", "e");
       }
     }, "Failure: Expected <[a, b, c]> do fail with args <[d, e]>");
+  }
+
+  @Test
+  public void shouldGenerateErrorMessageCustomizedByTheMatcherForActual() throws Exception {
+    final ClassWithUselessToString actual = new ClassWithUselessToString("foo");
+    assertEquals("bad toString", actual.toString());
+    newCustomMessageExpect(actual).toHaveName("foo");
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newCustomMessageExpect(actual).toHaveName("bar");
+      }
+    }, "Failure: Expected <custom actual message1 foo> to have name <bar>");
+  }
+
+  @Test
+  public void shouldGenerateErrorMessageCustomizedByTheMatcherForExpected() throws Exception {
+    final ClassWithUselessToString expected = new ClassWithUselessToString("bar");
+    assertEquals("bad toString", expected.toString());
+    newCustomMessageExpect(new ClassWithUselessToString("bar")).toHaveSameName(expected);
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newCustomMessageExpect(new ClassWithUselessToString("foo")).toHaveSameName(expected);
+      }
+    }, "Failure: Expected <custom actual message2 foo> to have same name <custom expected message bar>");
+  }
+
+  @Test
+  public void shouldGenerateErrorMessageFullyCustomizedByTheMatcher() throws Exception {
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newCustomMessageExpect(new ClassWithUselessToString("foo")).failWithFullyCustomizedError();
+      }
+    }, "Failure: Expected something to have something else");
   }
 
   @Test
@@ -145,6 +178,45 @@ public class GreatExpectationsTest {
     @AllowActualToBeNull
     public boolean doPermitNullActual() {
       return true;
+    }
+  }
+
+  private static <T extends ClassWithUselessToString, M extends BaseMatcher<T, M>> CustomMessageMatcher<T, M> newCustomMessageExpect(T actual) {
+    return wrapped(CustomMessageMatcher.class, actual);
+  }
+
+  public static class CustomMessageMatcher<T extends ClassWithUselessToString, M extends BaseMatcher<T, M>> extends BaseMatcher<T, M> {
+    public boolean toHaveName(String expectedName) {
+      descriptionOfActual = "custom actual message1 " + actual.getName();
+      return actual.getName().equals(expectedName);
+    }
+
+    public boolean toHaveSameName(ClassWithUselessToString expected) {
+      descriptionOfActual = "custom actual message2 " + actual.getName();
+      descriptionOfExpected = "custom expected message " + expected.getName();
+      return actual.getName().equals(expected.getName());
+    }
+
+    public boolean failWithFullyCustomizedError() {
+      failureMessage = "something to have something else";
+      return false;
+    }
+  }
+
+  public static class ClassWithUselessToString {
+    private String name;
+
+    public ClassWithUselessToString(String name) {
+      this.name = name;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    @Override
+    public String toString() {
+      return "bad toString";
     }
   }
 }

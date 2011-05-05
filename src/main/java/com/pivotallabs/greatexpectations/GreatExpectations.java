@@ -44,13 +44,35 @@ public class GreatExpectations {
   @SuppressWarnings({"UnusedDeclaration"})
   public static boolean afterMatch(BaseMatcher baseMatcher, String methodName, boolean result, Object[] expectArgs) {
     if (result == baseMatcher.inverted) {
-      StringBuilder message = new StringBuilder();
-      message
-          .append("Failure: Expected <")
-          .append(baseMatcher.actual)
-          .append(baseMatcher.inverted ? "> not " : "> ")
-          .append(methodName.replaceAll("([A-Z])", " $1").toLowerCase());
+      throw new AssertionError(descriptionOfFailure(baseMatcher, methodName, expectArgs));
+    }
+    return true;
+  }
 
+  private static String descriptionOfFailure(BaseMatcher baseMatcher, String methodName, Object[] expectArgs) {
+    StringBuilder message = new StringBuilder();
+    message.append("Failure: Expected ");
+
+    if (baseMatcher.failureMessage != null) {
+      message.append(baseMatcher.failureMessage);
+    } else {
+      message
+          .append("<")
+          .append(descriptionOfActual(baseMatcher))
+          .append(baseMatcher.inverted ? "> not " : "> ")
+          .append(methodName.replaceAll("([A-Z])", " $1").toLowerCase())
+          .append(descriptionOfExpected(baseMatcher, expectArgs));
+    }
+
+    return message.toString();
+  }
+
+  private static String descriptionOfExpected(BaseMatcher baseMatcher, Object[] expectArgs) {
+    StringBuilder message = new StringBuilder();
+
+    if (baseMatcher.descriptionOfExpected != null) {
+      message.append(" <").append(baseMatcher.descriptionOfExpected).append(">");
+    } else {
       for (int i = 0; i < expectArgs.length; i++) {
         Object expectArg = expectArgs[i];
         message.append(i == 0 ? " <" : ">, <");
@@ -61,9 +83,16 @@ public class GreatExpectations {
         message.append(expectArg);
       }
       if (expectArgs.length > 0) message.append(">");
-      throw new AssertionError(message.toString());
     }
-    return true;
+
+    return message.toString();
+  }
+
+  private static String descriptionOfActual(BaseMatcher baseMatcher) {
+    if (baseMatcher.descriptionOfActual != null) {
+      return baseMatcher.descriptionOfActual;
+    }
+    return baseMatcher.actual.toString();
   }
 
   @SuppressWarnings({"UnusedDeclaration"})
