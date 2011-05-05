@@ -51,13 +51,14 @@ public class GreatExpectations {
 
   private static String descriptionOfFailure(BaseMatcher baseMatcher, String methodName, Object[] expectArgs) {
     StringBuilder message = new StringBuilder();
-    message.append("Failure: Expected ");
+    message.append("Failure: ");
 
     if (baseMatcher.failureMessage != null) {
-      message.append(baseMatcher.failureMessage);
+      message.append(baseMatcher.inverted ? "Did not expect " : "Expected ")
+          .append(baseMatcher.failureMessage);
     } else {
       message
-          .append("<")
+          .append("Expected <")
           .append(descriptionOfActual(baseMatcher))
           .append(baseMatcher.inverted ? "> not " : "> ")
           .append(methodName.replaceAll("([A-Z])", " $1").toLowerCase())

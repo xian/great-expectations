@@ -80,10 +80,10 @@ public class GreatExpectationsTest {
   public void shouldGenerateErrorMessageCustomizedByTheMatcherForActual() throws Exception {
     final ClassWithUselessToString actual = new ClassWithUselessToString("foo");
     assertEquals("bad toString", actual.toString());
-    newCustomMessageExpect(actual).toHaveName("foo");
+    newExpect(actual).toHaveName("foo");
     expectFailure(new Runnable() {
       @Override public void run() {
-        newCustomMessageExpect(actual).toHaveName("bar");
+        newExpect(actual).toHaveName("bar");
       }
     }, "Failure: Expected <custom actual message1 foo> to have name <bar>");
   }
@@ -92,10 +92,10 @@ public class GreatExpectationsTest {
   public void shouldGenerateErrorMessageCustomizedByTheMatcherForExpected() throws Exception {
     final ClassWithUselessToString expected = new ClassWithUselessToString("bar");
     assertEquals("bad toString", expected.toString());
-    newCustomMessageExpect(new ClassWithUselessToString("bar")).toHaveSameName(expected);
+    newExpect(new ClassWithUselessToString("bar")).toHaveSameName(expected);
     expectFailure(new Runnable() {
       @Override public void run() {
-        newCustomMessageExpect(new ClassWithUselessToString("foo")).toHaveSameName(expected);
+        newExpect(new ClassWithUselessToString("foo")).toHaveSameName(expected);
       }
     }, "Failure: Expected <custom actual message2 foo> to have same name <custom expected message bar>");
   }
@@ -104,9 +104,15 @@ public class GreatExpectationsTest {
   public void shouldGenerateErrorMessageFullyCustomizedByTheMatcher() throws Exception {
     expectFailure(new Runnable() {
       @Override public void run() {
-        newCustomMessageExpect(new ClassWithUselessToString("foo")).failWithFullyCustomizedError();
+        newExpect(new ClassWithUselessToString("foo")).failWithFullyCustomizedError();
       }
     }, "Failure: Expected something to have something else");
+    
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newExpect(new ClassWithUselessToString("foo")).not.passWithFullyCustomizedError();
+      }
+    }, "Failure: Did not expect something to have something else");
   }
 
   @Test
@@ -181,7 +187,7 @@ public class GreatExpectationsTest {
     }
   }
 
-  private static <T extends ClassWithUselessToString, M extends BaseMatcher<T, M>> CustomMessageMatcher<T, M> newCustomMessageExpect(T actual) {
+  private static <T extends ClassWithUselessToString, M extends CustomMessageMatcher<T, M>> CustomMessageMatcher<T, M> newExpect(T actual) {
     return wrapped(CustomMessageMatcher.class, actual);
   }
 
@@ -200,6 +206,11 @@ public class GreatExpectationsTest {
     public boolean failWithFullyCustomizedError() {
       failureMessage = "something to have something else";
       return false;
+    }
+
+    public boolean passWithFullyCustomizedError() {
+      failureMessage = "something to have something else";
+      return true;
     }
   }
 
