@@ -55,6 +55,8 @@ Here's how the matcher looks:
 
 Create a class with a generic signature from hell. Then just create a method which returns true or false. Done. Boom.
 
+If you don't like the default failure message that you see in your red tests when toContain() returns false, you can customize the message right inside your implementation of toContain() by assigning strings to variables called ```descriptionOfActual``` and/or ```descriptionOfExpected```. Or, if you'd like to customize the entire message, assign a string to the variable called ```failureMessage```.
+
 ### Generating Expect.java
 
 Oh yeah, sorry, we have to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers by extending ExpectGenerator.matcherClasses() and adding to the list.
