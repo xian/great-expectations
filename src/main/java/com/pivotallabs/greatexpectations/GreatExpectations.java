@@ -93,7 +93,7 @@ public class GreatExpectations {
     if (baseMatcher.descriptionOfActual != null) {
       return baseMatcher.descriptionOfActual;
     }
-    return baseMatcher.actual.toString();
+    return baseMatcher.actual + "";
   }
 
   @SuppressWarnings({"UnusedDeclaration"})

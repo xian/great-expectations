@@ -101,6 +101,21 @@ public class GreatExpectationsTest {
   }
 
   @Test
+  public void shouldGenerateErrorMessageForNullActual() throws Exception {
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        ClassWithUselessToString nullActual = null;
+        newExpect(nullActual).not.allowActualNull();
+      }
+    }, "Failure: Expected <null> not allow actual null");
+    expectFailure(new Runnable() {
+      @Override public void run() {
+        newExpect(new ClassWithUselessToString("foo")).allowActualNull();
+      }
+    }, "Failure: Expected <bad toString> allow actual null");
+  }
+
+  @Test
   public void shouldGenerateErrorMessageFullyCustomizedByTheMatcher() throws Exception {
     expectFailure(new Runnable() {
       @Override public void run() {
@@ -131,7 +146,7 @@ public class GreatExpectationsTest {
 
   ////////////////
 
-  private void expectFailure(Runnable runnable, String expectedMessage) {
+  public static void expectFailure(Runnable runnable, String expectedMessage) {
     AssertionError e = null;
     try {
       runnable.run();
@@ -211,6 +226,11 @@ public class GreatExpectationsTest {
     public boolean passWithFullyCustomizedError() {
       failureMessage = "something to have something else";
       return true;
+    }
+
+    @AllowActualToBeNull
+    public boolean allowActualNull() {
+      return actual == null;
     }
   }
 
