@@ -59,7 +59,7 @@ Create a class with a generic signature from hell. Then just create a method whi
 
 If you don't like the default failure message that you see in your red tests, you can customize the message right inside the implementation of each matcher method by assigning strings to variables called ```descriptionOfActual``` and/or ```descriptionOfExpected```.  Remember that your test can fail even when your matcher returns true if the test used ```not``` to invert your matcher, so if you want to customize the failure message go ahead and do it unconditionally.
 
-Or, if you'd like to customize the entire message, assign a string to the variable called ```failureMessage```.  You can also assign this string unconditionally.  It will automatically get prefixed with either "Failure: Expected" or "Failure: Did not expect" depending on whether the test used ```not``` to invert your matcher.
+Or, if you'd like to customize the entire message, assign a string to the variable called ```failureMessage```.  You should do so unconditionally.  It will automatically get prefixed with either "Failure: Expected" or "Failure: Did not expect" depending on whether the test used ```not``` to invert your matcher.
 
 ### Generating Expect.java
 
