@@ -80,20 +80,20 @@ great-expectations is available through maven:
 
 or download directly:
 
-    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.9/great-expectations-0.9.jar
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.10/great-expectations-0.10.jar
 
 Releases
 ========
 
-### 0.10
+### 0.10 (June 6, 2011)
 * Matchers can override the default messages returned when an expectation fails. [Thanks Ryan Richard @ Pivotal Labs!]
 
-### 0.9
+### 0.9 (April 14, 2011)
 * Added String toMatch(), which matches against regular expressions.
 * Iterable's toContain() now doesn't care about order. Added toContainInOrder().
 * Fixes compilation errors and warnings.
 
-### 0.8
+### 0.8 (April 10, 2011)
 * Initial packaged release.
 
 Acknowledgements
