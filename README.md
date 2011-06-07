@@ -61,9 +61,11 @@ If you don't like the default failure message that you see in your red tests, yo
 
 Or, if you'd like to customize the entire message, assign a string to the variable called ```failureMessage```.  You should do so unconditionally.  It will automatically get prefixed with either "Failure: Expected" or "Failure: Did not expect" depending on whether the test used ```not``` to invert your matcher.
 
-### Generating Expect.java
+#### Generating Expect.java
 
-Oh yeah, sorry, we have to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers by extending ExpectGenerator.matcherClasses() and adding to the list.
+If you want to include your own custom matchers, we need to generate some java glue code too. Bummer. Use ExpectGenerator to spew out your Expect class. You can add your own matchers by extending ExpectGenerator.matcherClasses() and adding to the list.
+
+We do this so you'll only ever have to import a single Expect class in any test.
 
 Download
 ========
@@ -73,7 +75,7 @@ great-expectations is available through maven:
     <dependency>
       <groupId>com.github.xian</groupId>
       <artifactId>great-expectations</artifactId>
-      <version>0.9</version>
+      <version>0.10</version>
     </dependency>
 
 or download directly:
@@ -83,6 +85,9 @@ or download directly:
 Releases
 ========
 
+### 0.10
+* Matchers can override the default messages returned when an expectation fails. [Thanks Ryan Richard @ Pivotal Labs!]
+
 ### 0.9
 * Added String toMatch(), which matches against regular expressions.
 * Iterable's toContain() now doesn't care about order. Added toContainInOrder().
@@ -90,3 +95,12 @@ Releases
 
 ### 0.8
 * Initial packaged release.
+
+Acknowledgements
+================
+* Thanks to Tyler Schultz @ Pivotal Labs for the name!
+* Thanks to Phil Goodwin @ Pivotal Labs for his expertise navigating the darkest corners of Java generics syntax!
+
+---
+
+great-expectations was written by Christian Williams and released under [the MIT License](https://github.com/xian/great-expectations/blob/master/LICENSE.txt).
