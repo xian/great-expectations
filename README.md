@@ -75,12 +75,12 @@ great-expectations is available through maven:
     <dependency>
       <groupId>com.github.xian</groupId>
       <artifactId>great-expectations</artifactId>
-      <version>0.10</version>
+      <version>0.11</version>
     </dependency>
 
 or download directly:
 
-    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.10/great-expectations-0.10.jar
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.11/great-expectations-0.11.jar
 
 Releases
 ========
