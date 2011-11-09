@@ -19,7 +19,7 @@ public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher
     int expectedIndex = 0;
 
     for (X x : actual) {
-      if (x.equals(expectedItems[expectedIndex])) {
+      if (eq(x, expectedItems[expectedIndex])) {
         expectedIndex++;
       }
 
@@ -34,7 +34,7 @@ public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher
     int i = 0;
 
     for (X x : actual) {
-      if (i >= expectedItems.length || !x.equals(expectedItems[i++])) {
+      if (i >= expectedItems.length || !eq(x, expectedItems[i++])) {
         return false;
       }
     }
@@ -44,6 +44,10 @@ public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher
 
   public boolean toBeEmpty() {
     return !actual.iterator().hasNext();
+  }
+
+  private boolean eq(X actual, X expected) {
+    return actual == null ? actual == expected : actual.equals(expected);
   }
 
   private List<X> items() {

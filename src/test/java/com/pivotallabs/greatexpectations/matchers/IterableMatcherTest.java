@@ -20,7 +20,9 @@ public class IterableMatcherTest {
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a"));
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("b"));
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("c"));
+    assertTrue(newExpect(Arrays.asList("a", null, "c")).toContainInOrder((String) null));
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("d"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder((String) null));
 
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "b"));
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "b", "c"));
@@ -31,6 +33,7 @@ public class IterableMatcherTest {
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("c", "a"));
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "c", "b"));
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainInOrder("a", "a"));
+    assertFalse(newExpect(Arrays.asList("b", null, "c")).toContainInOrder("a"));
   }
 
   @Test public void toContainExactly() throws Exception {
@@ -47,6 +50,7 @@ public class IterableMatcherTest {
     assertFalse(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "c"));
     assertTrue(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "b", "c"));
     assertFalse(newExpect(Arrays.asList("a", "b", "b", "c")).toContainExactly("a", "b", "c", "b"));
+    assertFalse(newExpect(Arrays.asList(null, "b", "b", "c")).toContainExactly(null, "b", "c", "b"));
   }
 
   @Test

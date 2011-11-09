@@ -85,6 +85,9 @@ or download directly:
 Releases
 ========
 
+### 0.11 (Nov 8, 2011)
+* Iterables can now contain nulls. [Thanks Pascal and Taylor @ Square!]
+
 ### 0.10 (June 6, 2011)
 * Matchers can override the default messages returned when an expectation fails. [Thanks Ryan Richard @ Pivotal Labs!]
 
