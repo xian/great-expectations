@@ -11,11 +11,11 @@ public class StringMatcher<T extends String, M extends StringMatcher<T, M>> exte
   }
 
   public boolean toStartWith(String expected) {
-    return expected != null && actual.startsWith(expected);
+    return actual.startsWith(expected);
   }
 
   public boolean toEndWith(String expected) {
-    return expected != null && actual.endsWith(expected);
+    return actual.endsWith(expected);
   }
 
   public boolean toMatch(String expectedPattern) {

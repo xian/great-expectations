@@ -76,7 +76,6 @@ public class IterableMatcherTest {
     assertFalse(newExpect(Arrays.asList("a", "b", null)).toContainExactlyInAnyOrder("a", "b", "c"));
     assertFalse(newExpect(Arrays.asList("a", "a", "b")).toContainExactlyInAnyOrder("a", "b"));
     assertFalse(newExpect(Arrays.asList("a")).toContainExactlyInAnyOrder("a", "a"));
-    assertFalse(newExpect(Arrays.asList("a")).toContainExactlyInAnyOrder(null));
   }
 
   @Test

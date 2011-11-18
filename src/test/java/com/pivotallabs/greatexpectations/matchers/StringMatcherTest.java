@@ -25,14 +25,12 @@ public class StringMatcherTest {
   public void testToStartWith() throws Exception {
     assertTrue(newExpect("Hello World").toStartWith("Hello"));
     assertFalse(newExpect("Hello World").toStartWith("Blah"));
-    assertFalse(newExpect("Hello World").toStartWith(null));
   }
 
   @Test
   public void testToEndWith() throws Exception {
     assertTrue(newExpect("Hello World").toEndWith("rld"));
     assertFalse(newExpect("Hello World").toEndWith("Hello"));
-    assertFalse(newExpect("Hello World").toEndWith(null));
   }
 
   ///////////////////

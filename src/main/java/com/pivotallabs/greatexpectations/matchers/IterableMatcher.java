@@ -44,10 +44,6 @@ public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher
   }
 
   public boolean toContainExactlyInAnyOrder(X... expectedItems) {
-    if (expectedItems == null) {
-      return false;
-    }
-
     ObjectCounter<X> expectedItemsCounter = new ObjectCounter<X>();
     for (X expectedItem : expectedItems) {
       expectedItemsCounter.incrementCount(expectedItem);
