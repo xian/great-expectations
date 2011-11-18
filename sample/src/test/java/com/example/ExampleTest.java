@@ -57,4 +57,15 @@ public class ExampleTest {
     expect(strings).toContain("1");
     expect(strings).not.toContain("1");
   }
+
+  @Test
+  public void numbers() throws Exception {
+    Long theAnswer = new Long(42);
+    expect(theAnswer).toEqual(42);
+    expect(theAnswer).toEqual(42L);
+    expect(theAnswer).toBeGreaterThan(41);
+    expect(theAnswer).toBeGreaterThan(41L);
+    expect(theAnswer).toBeLessThan(43);
+    expect(theAnswer).toBeLessThan(43L);
+  }
 }
