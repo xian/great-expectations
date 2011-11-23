@@ -15,6 +15,24 @@ public class StringMatcherTest {
     assertTrue(newExpect("abc").toMatch("[a][b][c]"));
   }
 
+  @Test
+  public void testToContain() throws Exception {
+    assertTrue(newExpect("Hello World").toContain("World"));
+    assertFalse(newExpect("Hello World").toContain("Blah"));
+  }
+
+  @Test
+  public void testToStartWith() throws Exception {
+    assertTrue(newExpect("Hello World").toStartWith("Hello"));
+    assertFalse(newExpect("Hello World").toStartWith("Blah"));
+  }
+
+  @Test
+  public void testToEndWith() throws Exception {
+    assertTrue(newExpect("Hello World").toEndWith("rld"));
+    assertFalse(newExpect("Hello World").toEndWith("Hello"));
+  }
+
   ///////////////////
 
   private StringMatcher<String, ?> newExpect(String value) {

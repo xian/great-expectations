@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -57,6 +58,59 @@ public class IterableMatcherTest {
   public void toBeEmpty() throws Exception {
     assertTrue(newExpect(Arrays.asList()).toBeEmpty());
     assertFalse(newExpect(Arrays.asList("a", "b", "c")).toBeEmpty());
+  }
+
+  @Test
+  public void toContainExactlyInAnyOrder() throws Exception {
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a", "b", "c"));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("c", "a", "b"));
+    assertTrue(newExpect(Arrays.asList("a", "b", null)).toContainExactlyInAnyOrder(null, "a", "b"));
+    assertTrue(newExpect(Arrays.asList("a", "a", "b")).toContainExactlyInAnyOrder("a", "b", "a"));
+    assertTrue(newExpect(Arrays.asList(new String[] {null})).toContainExactlyInAnyOrder(new String[] {null}));
+
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a", "b", "d"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a", "b", "c", "d"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a", null, "d"));
+    assertFalse(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder(new String[] {null}));
+    assertFalse(newExpect(Arrays.asList("a", "b", null)).toContainExactlyInAnyOrder("a", "b", "c"));
+    assertFalse(newExpect(Arrays.asList("a", "a", "b")).toContainExactlyInAnyOrder("a", "b"));
+    assertFalse(newExpect(Arrays.asList("a")).toContainExactlyInAnyOrder("a", "a"));
+  }
+
+  @Test
+  public void objectCounter_utilityClass() throws Exception {
+    IterableMatcher.ObjectCounter<String> counter = new IterableMatcher.ObjectCounter<String>();
+    assertTrue(counter.allCountsAreZero());
+
+    assertEquals(0, counter.getCount("foo"));
+    counter.decrementCount("foo");
+    assertEquals(0, counter.getCount("foo"));
+    assertTrue(counter.allCountsAreZero());
+
+    counter.incrementCount("foo");
+    assertEquals(1, counter.getCount("foo"));
+    assertEquals(0, counter.getCount("bar"));
+    assertFalse(counter.allCountsAreZero());
+
+    counter.incrementCount("foo");
+    assertEquals(2, counter.getCount("foo"));
+
+    counter.incrementCount("bar");
+    assertEquals(2, counter.getCount("foo"));
+    assertEquals(1, counter.getCount("bar"));
+
+    counter.decrementCount("foo");
+    assertEquals(1, counter.getCount("foo"));
+    assertEquals(1, counter.getCount("bar"));
+
+    counter.decrementCount("foo");
+    assertEquals(0, counter.getCount("foo"));
+
+    counter.decrementCount("bar");
+    assertEquals(0, counter.getCount("bar"));
+
+    assertTrue(counter.allCountsAreZero());
   }
 
   ///////////////////
