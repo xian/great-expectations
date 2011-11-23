@@ -23,6 +23,9 @@ public class Expect {
     public static <T extends Iterable<X>, X, M extends IterableMatcher<T, X, M>> IterableMatcher<T, X, ?> expect(T actual) {
         return wrapped(IterableMatcher.class, actual);
     }
+    public static <T extends Long, M extends LongMatcher<T, M>> LongMatcher<T, ?> expect(T actual) {
+        return wrapped(LongMatcher.class, actual);
+    }
     public static <T extends String, M extends StringMatcher<T, M>> StringMatcher<T, ?> expect(T actual) {
         return wrapped(StringMatcher.class, actual);
     }
