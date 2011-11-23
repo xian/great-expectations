@@ -7,7 +7,7 @@ great-expectations
     expect(getLoggedInUser()).toBeNull();
     expect(listOfMeats).not.toContain("mortadella");
 
-JUnit 4's assertThat() is kinda awesome and kinda sucks. It's awesome cuz it encourages you to write your own matchers. It sucks cuz it makes it really painful to write your own matchers. And it makes it really hard to find existing matcehrs.
+JUnit 4's assertThat() is kinda awesome and kinda sucks. It's awesome cuz it encourages you to write your own matchers. It sucks cuz it makes it really painful to write your own matchers. And it makes it really hard to find existing matchers.
 
 great-expectations makes it dead-simple to find existing relevant matchers using autocomplete in your favorite IDE, and it makes it very easy to declare your own type-safe matchers.
 
