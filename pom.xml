@@ -10,7 +10,7 @@
 
   <groupId>com.github.xian</groupId>
   <artifactId>great-expectations</artifactId>
-  <version>0.12-SNAPSHOT</version>
+  <version>0.12</version>
   <packaging>jar</packaging>
   <name>great-expectations</name>
   <description>Jasmine-style expect() for Java.</description>
