@@ -80,23 +80,26 @@ great-expectations is available through maven:
 
 or download directly:
 
-    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.11/great-expectations-0.11.jar
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.12/great-expectations-0.12.jar
 
 Releases
 ========
 
-### 0.11 (Nov 8, 2011)
+### 0.12 (2011-11-23)
+* Added matchers: toStartWith and toEndWith for Strings, toContainExactlyInAnyOrder for Iterables, and nicer handling of Long comparisons. [Thanks Ryan Richard @ Pivotal Labs!]
+
+### 0.11 (2011-11-08)
 * Iterables can now contain nulls. [Thanks Pascal and Taylor @ Square!]
 
-### 0.10 (June 6, 2011)
+### 0.10 (2011-06-06)
 * Matchers can override the default messages returned when an expectation fails. [Thanks Ryan Richard @ Pivotal Labs!]
 
-### 0.9 (April 14, 2011)
+### 0.9 (2011-04-14)
 * Added String toMatch(), which matches against regular expressions.
 * Iterable's toContain() now doesn't care about order. Added toContainInOrder().
 * Fixes compilation errors and warnings.
 
-### 0.8 (April 10, 2011)
+### 0.8 (2011-04-10)
 * Initial packaged release.
 
 Acknowledgements
