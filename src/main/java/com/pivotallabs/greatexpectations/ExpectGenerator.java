@@ -8,10 +8,19 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class ExpectGenerator {
+  private static Map<Class, String> wrappers = new HashMap<Class, String>();
+
   private Set<String> importedPackages = new HashSet<String>();
   private String packageName;
   private PrintStream out;
 
+  static {
+    wrappers.put(Integer.class, "int");
+    wrappers.put(Long.class, "long");
+    wrappers.put(Float.class, "float");
+    wrappers.put(Double.class, "double");
+  }
+  
   public ExpectGenerator(String packageName) {
     importedPackages.add("java.lang");
     importedPackages.add(packageName);
@@ -50,6 +59,18 @@ public class ExpectGenerator {
           .append("?> expect(T actual) {\n" + "        return wrapped(")
           .append(name)
           .append(".class, actual);\n" + "    }");
+
+      if (wrappers.containsKey(targetClass)) {
+        buf.append("\n    public static ")
+            .append(name)
+            .append("<")
+            .append(className(targetClass))
+            .append(", ?> expect(")
+            .append(wrappers.get(targetClass))
+            .append(" actual) {\n" + "        return wrapped(")
+            .append(name)
+            .append(".class, actual);\n" + "    }");
+      }
     }
     return buf.toString();
   }
@@ -92,7 +113,11 @@ public class ExpectGenerator {
             ComparableMatcher.class,
             DateMatcher.class,
             IterableMatcher.class,
-            StringMatcher.class
+            StringMatcher.class,
+            IntegerMatcher.class,
+            LongMatcher.class,
+            FloatMatcher.class,
+            DoubleMatcher.class
         )
     );
   }
