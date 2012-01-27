@@ -10,7 +10,7 @@ public class ObjectMatcher<T, M extends ObjectMatcher<T, M>> extends BaseMatcher
     return actual.equals(expected);
   }
 
-  public boolean toBe(T expected) {
+  public boolean toBeSameInstance(T expected) {
     return actual == expected;
   }
 

@@ -10,21 +10,21 @@ import static org.junit.Assert.assertTrue;
 
 public class ObjectMatcherTest {
   @Test
-  public void toBe_shouldReturnTrueIffObjectsAreIdentical() throws Exception {
+  public void toBeSameInstance_shouldReturnTrueIffObjectsAreIdentical() throws Exception {
     String abc = "abc";
-    assertTrue(newExpect(abc).toBe(abc));
-    assertFalse(newExpect(abc).toBe("def"));
-    assertFalse(newExpect(abc).toBe(new String(abc)));
+    assertTrue(newExpect(abc).toBeSameInstance(abc));
+    assertFalse(newExpect(abc).toBeSameInstance("def"));
+    assertFalse(newExpect(abc).toBeSameInstance(new String(abc)));
   }
 
   @Test
-  public void toBe_shouldNotExplicitlyCheckForNull() throws Exception {
-    newExpect(null).toBe("anything");
+  public void toBeSameInstance_shouldNotExplicitlyCheckForNull() throws Exception {
+    newExpect(null).toBeSameInstance("anything");
   }
 
   @Test(expected = NullPointerException.class)
-  public void toBe_whenWrappedAndActualIsNull_shouldThrowNullPointerException() throws Exception {
-    wrapped(ObjectMatcher.class, null).toBe("anything");
+  public void toBeSameInstance_whenWrappedAndActualIsNull_shouldThrowNullPointerException() throws Exception {
+    wrapped(ObjectMatcher.class, null).toBeSameInstance("anything");
   }
 
   @Test
