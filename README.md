@@ -15,8 +15,7 @@ Quick Start
 ===========
 
 1. Download [great-expectations](http://mvnrepository.com/artifact/com.github.xian/great-expectations). If you're not using Maven or something like it for dependency management, don't forget to grab asm and asm-commons too, and put them all in your test classpath. (And think about using Maven.)
-1. Create a class named Expect in your project, containing the contents of [this file](https://github.com/xian/great-expectations/raw/master/sample/src/test/java/com/example/Expect.java) (fix the package name to match where you place it).
-1. Now write your first expectation in a test:
+1. Write your first expectation in a test:
 
     expect(true).toBeFalse();
 
@@ -75,15 +74,19 @@ great-expectations is available through maven:
     <dependency>
       <groupId>com.github.xian</groupId>
       <artifactId>great-expectations</artifactId>
-      <version>0.11</version>
+      <version>0.13</version>
     </dependency>
 
 or download directly:
 
-    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.12/great-expectations-0.12.jar
+    http://repo1.maven.org/maven2/com/github/xian/great-expectations/0.13/great-expectations-0.13.jar
 
 Releases
 ========
+
+### 0.13 (2012-04-19)
+* Added matchers: toContain, toContainExactly, toBeEmpty, and toNumber for Sets, toNumber for Iterables.
+* Added default Expect class for quick and easy initial setup.
 
 ### 0.12 (2011-11-23)
 * Added matchers: toStartWith and toEndWith for Strings, toContainExactlyInAnyOrder for Iterables, and nicer handling of Long comparisons. [Thanks Ryan Richard @ Pivotal Labs!]
