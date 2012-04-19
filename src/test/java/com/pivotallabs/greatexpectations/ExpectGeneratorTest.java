@@ -59,6 +59,17 @@ public class ExpectGeneratorTest {
   }
 
   @Test
+  public void forMatcherOfPrimitiveWrapper_shouldGenerateTwoExpectMethods_toWorkaroundAutoboxingInsanity() throws Exception {
+    assertEquals("    public static <T extends Double, M extends DoubleMatcher<T, M>> DoubleMatcher<T, ?> expect(T actual) {\n" +
+        "        return wrapped(DoubleMatcher.class, actual);\n" +
+        "    }\n" +
+        "    public static DoubleMatcher<Double, ?> expect(double actual) {\n" +
+        "        return wrapped(DoubleMatcher.class, actual);\n" +
+        "    }",
+        expectGenerator.generateFor(DoubleMatcher.class));
+  }
+
+  @Test
   public void matcherClasses_shouldReturnAMutableList() throws Exception {
     expectGenerator.matcherClasses().add(GreatExpectationsTest.TestMatcher.class);
   }
