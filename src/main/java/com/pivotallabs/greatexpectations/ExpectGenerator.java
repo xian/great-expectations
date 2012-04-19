@@ -67,7 +67,11 @@ public class ExpectGenerator {
 
     out.println("public class Expect {");
     for (Class<? extends BaseMatcher> aClass : classes) {
-      out.println(generateFor(aClass));
+      try {
+        out.println(generateFor(aClass));
+      } catch (Exception e) {
+        throw new RuntimeException("error generating expect() for " + aClass.getName(), e);
+      }
     }
     out.println("}");
   }
@@ -77,7 +81,8 @@ public class ExpectGenerator {
   }
 
   public static void main(String[] args) throws IOException {
-    ExpectGenerator expectGenerator = new ExpectGenerator(args[0]);
+    String packageName = args.length == 0 ? ExpectGenerator.class.getPackage().getName() : args[0];
+    ExpectGenerator expectGenerator = new ExpectGenerator(packageName);
     if (args.length == 3 && args[1].equals("--outFile")) {
       expectGenerator.setOut(new PrintStream(new File(args[2])));
     }
@@ -92,6 +97,8 @@ public class ExpectGenerator {
             ComparableMatcher.class,
             DateMatcher.class,
             IterableMatcher.class,
+            SetMatcher.class,
+            LongMatcher.class,
             StringMatcher.class
         )
     );
