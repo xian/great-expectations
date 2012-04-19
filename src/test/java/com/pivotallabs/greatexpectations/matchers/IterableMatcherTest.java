@@ -61,6 +61,12 @@ public class IterableMatcherTest {
   }
 
   @Test
+  public void toNumber() throws Exception {
+    assertTrue(newExpect(Arrays.asList()).toNumber(0));
+    assertTrue(newExpect(Arrays.asList("a", "b", "c")).toNumber(3));
+  }
+
+  @Test
   public void toContainExactlyInAnyOrder() throws Exception {
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("a", "b", "c"));
     assertTrue(newExpect(Arrays.asList("a", "b", "c")).toContainExactlyInAnyOrder("c", "a", "b"));

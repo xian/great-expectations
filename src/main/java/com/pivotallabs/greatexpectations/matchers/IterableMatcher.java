@@ -64,6 +64,10 @@ public class IterableMatcher<T extends Iterable<X>, X, M extends IterableMatcher
     return !actual.iterator().hasNext();
   }
 
+  public boolean toNumber(int expectedCount) {
+    return items().size() == expectedCount;
+  }
+
   private boolean eq(X actual, X expected) {
     return actual == null ? actual == expected : actual.equals(expected);
   }
