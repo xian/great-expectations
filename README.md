@@ -84,6 +84,10 @@ or download directly:
 Releases
 ========
 
+### 0.14 (2013-02-25)
+* Updated Expect class and Expect example to work with Java 1.7 [Thanks Chris Heisterkamp!]
+* Added Expect method for long primitive.
+
 ### 0.13 (2012-04-19)
 * Added matchers: toContain, toContainExactly, toBeEmpty, and toNumber for Sets, toNumber for Iterables.
 * Added default Expect class for quick and easy initial setup.
